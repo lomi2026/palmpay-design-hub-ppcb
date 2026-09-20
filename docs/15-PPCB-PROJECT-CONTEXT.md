@@ -4,7 +4,7 @@
 
 - 独立项目目录：`/Users/a1/Documents/PalmPay-Design-Hub-PPCB`
 - 工作分支：`codex/ppcb-deployment`
-- 独立 GitHub 仓库：`https://github.com/lomi2026/palmpay-design-hub-ppcb`（私有）
+- 独立 GitHub 仓库：`https://github.com/lomi2026/palmpay-design-hub-ppcb`（2026-09-20 经用户授权改为公开）
 - 本目录使用独立 `.git`，不再与原项目共享 Git 配置、分支或远程；`origin` 仅指向上述新仓库。
 - GitHub 用于源码版本管理；PPCB 仍通过源码包发布，平台受管 GitLab 关联不因 GitHub 推送自动改变。
 - PPCB 应用 ID：`palmpay-design-hub-builder`
