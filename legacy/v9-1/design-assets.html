@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="refresh" content="0; url=index.html#assets" />
+    <title>设计资产列表 | 设计智能资产平台</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="icon" type="image/png" href="assets/favicon-20260710.png" />
+    <meta name="theme-color" content="#020202" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400;500;600&display=swap" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400;500;600&display=swap" rel="stylesheet" media="print" onload="this.onload=null;this.media='all'" />
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400;500;600&display=swap" rel="stylesheet" /></noscript>
+    <style>
+      :root {
+        --bg: #020202;
+        --bg-soft: #0a0a0b;
+        --panel: rgba(255, 255, 255, 0.045);
+        --panel-strong: rgba(255, 255, 255, 0.07);
+        --line: rgba(255, 255, 255, 0.1);
+        --line-soft: rgba(255, 255, 255, 0.06);
+        --text: #f7f7f5;
+        --muted: rgba(255, 255, 255, 0.7);
+        --muted-soft: rgba(255, 255, 255, 0.48);
+        --shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+        --radius-xl: 32px;
+        --radius-lg: 24px;
+        --radius-md: 18px;
+        --max: 1180px;
+        --font-body: "Inter Tight", sans-serif;
+        --weight-body: 200;
+        --weight-ui: 300;
+        --weight-title: 400;
+        --weight-title-strong: 500;
+        --field-focus-border: rgba(255, 255, 255, 0.32);
+        --field-focus-glow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+        background: #020202;
+      }
+
+      body {
+        margin: 0;
+        color: var(--text);
+        font-family: var(--font-body);
+        font-weight: var(--weight-body);
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        background:
+          radial-gradient(circle at 20% 0%, rgba(104, 102, 255, 0.08), transparent 26%),
+          radial-gradient(circle at 80% 10%, rgba(140, 193, 255, 0.06), transparent 20%),
+          linear-gradient(180deg, #010101 0%, #040404 42%, #020202 100%);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .page {
+        padding: 24px 0 96px;
+      }
+
+      .container {
+        width: min(var(--max), calc(100vw - 32px));
+        margin: 0 auto;
+      }
+
+      .glass {
+        border: 1px solid var(--line);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03));
+        box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+      }
+
+      .topbar {
+        min-height: 80px;
+        padding: 0 16px 0 18px;
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.11), rgba(128, 128, 128, 0.08));
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow:
+          0 18px 60px rgba(0, 0, 0, 0.28),
+          inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(22px);
+        -webkit-backdrop-filter: blur(22px);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 15px;
+        font-weight: var(--weight-ui);
+        letter-spacing: 0;
+        flex-shrink: 0;
+      }
+
+      .brand-mark {
+        width: 38px;
+        height: 38px;
+        border-radius: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        background: transparent;
+        border: 0;
+      }
+
+      .brand-mark img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: contain;
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+        margin-left: auto;
+        margin-right: 32px;
+        color: rgba(255, 255, 255, 0.92);
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+      }
+
+      .nav a {
+        opacity: 1;
+        position: relative;
+        transition: color 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+      }
+
+      .nav a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -8px;
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent);
+        opacity: 0;
+        transform: scaleX(0.72);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+
+      .nav a:hover,
+      .nav a.active {
+        color: rgba(255, 255, 255, 1);
+        transform: translateY(-1px);
+      }
+
+      .nav a:hover::after,
+      .nav a.active::after {
+        opacity: 1;
+        transform: scaleX(1);
+      }
+
+      .chip,
+      .tag,
+      .tab,
+      .search {
+        border-radius: 999px;
+      }
+
+      .button,
+      .button-secondary,
+      .ghost-button,
+      .copy-button {
+        min-height: 56px;
+        padding: 0 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-size: 15px;
+        font-weight: var(--weight-title-strong);
+        letter-spacing: 0.01em;
+        transition: all 0.32s ease;
+      }
+
+      .button:hover,
+      .button-secondary:hover,
+      .ghost-button:hover,
+      .copy-button:hover {
+        transform: translateY(-2px);
+      }
+
+      .button {
+        color: #0b0b0b;
+        background: linear-gradient(180deg, #ffffff 0%, #ebebeb 100%);
+        border-radius: 14px;
+        padding: 0 32px;
+        box-shadow: 0 10px 30px rgba(255, 255, 255, 0.12);
+      }
+
+      .button-secondary,
+      .ghost-button,
+      .copy-button {
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 12px;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.08), rgba(140, 140, 140, 0.06));
+        box-shadow:
+          0 14px 34px rgba(0, 0, 0, 0.2),
+          inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+      }
+      .hero {
+        margin-top: 24px;
+        padding: 34px 36px 38px;
+        border-radius: var(--radius-xl);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at 85% 20%, rgba(123, 125, 255, 0.12), transparent 24%),
+          linear-gradient(135deg, rgba(255, 255, 255, 0.02), transparent 48%);
+        pointer-events: none;
+      }
+
+      .eyebrow,
+      .chip,
+      .meta-pill {
+        display: inline-flex;
+        align-items: center;
+        min-height: 36px;
+        padding: 0 14px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: var(--weight-ui);
+        letter-spacing: 0.05em;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      
+      h1 {
+        margin-top: 18px;
+        max-width: min(100%, 1120px);
+        font-size: clamp(46px, 6vw, 78px);
+        line-height: 0.97;
+        letter-spacing: -0.07em;
+        font-weight: var(--weight-title-strong);
+        text-wrap: pretty;
+      }
+
+      .hero-copy {
+        margin-top: 18px;
+        max-width: min(100%, 980px);
+        font-size: 18px;
+      }
+
+      .hero-actions,
+      .hero-meta,
+      .toolbar,
+      .toolbar-left,
+      .toolbar-right,
+      .asset-actions,
+      .asset-meta {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .hero-actions,
+      .hero-meta {
+        margin-top: 24px;
+      }
+
+      .hero-meta {
+        color: var(--muted-soft);
+        font-size: 13px;
+      }
+
+      .toolbar {
+        margin-top: 24px;
+        justify-content: space-between;
+        gap: 18px;
+        align-items: center;
+      }
+
+      .toolbar-left {
+        flex: 1 1 auto;
+        min-width: 0;
+        gap: 12px;
+        flex-wrap: nowrap;
+      }
+
+      .search {
+        flex: 0 0 340px;
+        min-height: 50px;
+        min-width: 340px;
+        padding: 0 18px;
+        border: 1px solid var(--line);
+        outline: none;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.05);
+        transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+      }
+
+      .search::placeholder {
+        color: rgba(255, 255, 255, 0.42);
+      }
+
+      .search:focus {
+        border-color: var(--field-focus-border);
+        box-shadow: var(--field-focus-glow);
+        background: rgba(255, 255, 255, 0.07);
+      }
+
+      .toolbar-right {
+        flex: 0 0 auto;
+        justify-content: flex-end;
+      }
+
+      .toolbar-right .button-secondary {
+        min-width: 188px;
+        white-space: nowrap;
+      }
+
+      .chip {
+        min-height: 46px;
+        padding: 0 16px;
+        flex: 0 0 auto;
+        white-space: nowrap;
+        cursor: pointer;
+        transition:
+          background 180ms ease,
+          border-color 180ms ease,
+          color 180ms ease,
+          transform 180ms ease;
+      }
+
+      .chip.active {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.13);
+        border-color: rgba(255, 255, 255, 0.18);
+      }
+
+      .content-grid {
+        margin-top: 18px;
+        display: grid;
+        grid-template-columns: 300px minmax(0, 1fr);
+        gap: 18px;
+      }
+
+      .sidebar,
+      .results,
+      .asset-card {
+        border-radius: var(--radius-xl);
+      }
+
+      .sidebar,
+      .results,
+      .asset-card {
+        padding: 24px;
+      }
+
+      .section-title {
+        font-size: 24px;
+        line-height: 1.04;
+        letter-spacing: -0.05em;
+        font-weight: var(--weight-title);
+      }
+
+      .section-copy {
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.72;
+      }
+
+      .filter-block + .filter-block {
+        margin-top: 20px;
+      }
+
+      .filter-label {
+        margin-bottom: 12px;
+        color: var(--muted-soft);
+        font-size: 12px;
+        font-weight: var(--weight-ui);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .filter-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .aside-note {
+        margin-top: 24px;
+        padding: 16px 18px;
+        border-radius: 22px;
+        border: 1px solid var(--line-soft);
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .aside-note strong {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        letter-spacing: -0.02em;
+        font-weight: var(--weight-title);
+      }
+
+      .aside-note span {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.72;
+      }
+
+      .results-head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .results-head p {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .asset-list {
+        margin-top: 20px;
+        display: grid;
+        gap: 14px;
+      }
+
+      .asset-card {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 18px;
+        transition:
+          transform 200ms ease,
+          border-color 200ms ease,
+          background 200ms ease;
+      }
+
+      .asset-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(255, 255, 255, 0.16);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.035));
+      }
+
+      .asset-index {
+        margin-bottom: 18px;
+        color: var(--muted-soft);
+        font-size: 12px;
+        font-weight: var(--weight-ui);
+        letter-spacing: 0.08em;
+      }
+
+      .asset-title {
+        font-size: clamp(28px, 4vw, 38px);
+        line-height: 1.02;
+        letter-spacing: -0.06em;
+        font-weight: var(--weight-title);
+      }
+
+      .asset-desc {
+        margin-top: 12px;
+        max-width: 760px;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.8;
+      }
+
+      .asset-meta {
+        margin-top: 18px;
+      }
+
+      .meta-pill {
+        min-height: 34px;
+        letter-spacing: 0.02em;
+      }
+
+      .asset-actions {
+        justify-content: flex-end;
+      }
+
+      .asset-actions .button-secondary {
+        min-width: 116px;
+      }
+
+      @media (max-width: 1040px) {
+        .content-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 920px) {
+        .nav {
+          display: none;
+        }
+
+        .toolbar {
+          align-items: stretch;
+        }
+
+        .toolbar-left {
+          flex-wrap: wrap;
+        }
+
+        .results-head,
+        .asset-card {
+          grid-template-columns: 1fr;
+        }
+
+        .asset-card {
+          display: block;
+        }
+
+        .asset-actions {
+          margin-top: 18px;
+          justify-content: flex-start;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .page {
+          padding-top: 16px;
+        }
+
+        .topbar,
+        .hero,
+        .sidebar,
+        .results,
+        .asset-card {
+          padding: 20px;
+        }
+
+        h1 {
+          font-size: 44px;
+        font-weight: var(--weight-title-strong);
+      }
+
+        .search {
+          flex-basis: 100%;
+          width: 100%;
+          min-width: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="container">
+        <header class="topbar glass">
+          <a class="brand" href="index.html">
+            <span class="brand-mark"><img src="assets/nav-logo-20260710.png" alt="PalmPay UX Design logo" width="108" height="108" /></span>
+            <span>PalmPay UX Design</span>
+          </a>
+          <nav class="nav">
+            <a href="index.html">返回首页</a>
+            <a class="active" href="design-assets.html">设计资产</a>
+            <a href="ai-skill-toolkit.html">AI SKILL</a>
+            <a href="index.html#assets">上传资产</a>
+          </nav>
+          <a class="button" href="index.html#assets">提交资产</a>
+        </header>
+
+        <section class="hero glass">
+          <div class="eyebrow">Design Asset Library</div>
+          <h1>把可复用的设计能力，组织成真正可浏览的资产系统</h1>
+          <p class="hero-copy">
+            这里承接首页“查看更多资产”入口，展示组件规范、AI Skill、页面模板和交付机制。页面从展示型卡片升级为更像真实产品的资产库，便于继续扩展搜索、筛选、详情和上传链路。
+          </p>
+          <div class="hero-actions">
+            <a class="button" href="index.html#assets">上传设计资产</a>
+            <a class="button-secondary" href="index.html#latest">返回首页精选</a>
+          </div>
+          <div class="hero-meta">
+            <span>128 条设计资产</span>
+            <span>36 条 AI 精选</span>
+            <span>4 个核心资产集合</span>
+          </div>
+        </section>
+
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <input class="search glass" type="search" placeholder="搜索资产名称、团队、关键词..." />
+            <button class="chip active" type="button">全部资产</button>
+            <button class="chip" type="button">最近更新</button>
+            <button class="chip" type="button">高复用</button>
+          </div>
+          <div class="toolbar-right">
+            <a class="button-secondary" href="ai-skill-toolkit.html">查看 AI Skill 集合</a>
+          </div>
+        </div>
+
+        <section class="content-grid">
+          <aside class="sidebar glass">
+            <h2 class="section-title">筛选视图</h2>
+            <p class="section-copy">用更产品化的方式浏览资产，而不是只靠一层静态列表。</p>
+
+            <div class="filter-block">
+              <div class="filter-label">资产类型</div>
+              <div class="filter-group">
+                <button class="chip active" type="button">全部</button>
+                <button class="chip" type="button">组件资产</button>
+                <button class="chip" type="button">AI 工作流</button>
+                <button class="chip" type="button">页面模板</button>
+                <button class="chip" type="button">交付规范</button>
+              </div>
+            </div>
+
+            <div class="filter-block">
+              <div class="filter-label">归属团队</div>
+              <div class="filter-group">
+                <button class="chip active" type="button">全部团队</button>
+                <button class="chip" type="button">设计系统</button>
+                <button class="chip" type="button">AI 设计</button>
+                <button class="chip" type="button">体验设计</button>
+                <button class="chip" type="button">设计运营</button>
+              </div>
+            </div>
+
+            <div class="filter-block">
+              <div class="filter-label">内容状态</div>
+              <div class="filter-group">
+                <button class="chip active" type="button">可复用</button>
+                <button class="chip" type="button">已验证</button>
+                <button class="chip" type="button">精选内容</button>
+              </div>
+            </div>
+
+            <div class="aside-note">
+              <strong>下一步可扩展</strong>
+              <span>继续接入真实搜索、资产详情页、收藏、上传审核流和权限控制后，这里就能直接升级为完整产品页。</span>
+            </div>
+          </aside>
+
+          <div class="results glass">
+            <div class="results-head">
+              <div>
+                <h2 class="section-title">精选资产列表</h2>
+                <p>当前展示 4 条高价值示例，用于承接首页入口和后续二级页浏览。</p>
+              </div>
+              <a class="button-secondary" href="index.html#assets">上传资产</a>
+            </div>
+
+            <div class="asset-list">
+              <article class="asset-card glass">
+                <div>
+                  <div class="asset-index">01 / COMPONENT LIBRARY</div>
+                  <h3 class="asset-title">AI设计组件规范</h3>
+                  <p class="asset-desc">适用于高频后台业务和智能工作台场景，覆盖复杂列表、筛选体系、批量操作与空状态治理，帮助团队在 AI 设计流程中保持体验一致性。</p>
+                  <div class="asset-meta">
+                    <span class="meta-pill">组件资产</span>
+                    <span class="meta-pill">设计系统小组</span>
+                    <span class="meta-pill">复用率 72%</span>
+                  </div>
+                </div>
+                <div class="asset-actions">
+                  <a class="button-secondary" href="#">查看详情</a>
+                </div>
+              </article>
+
+              <article class="asset-card glass">
+                <div>
+                  <div class="asset-index">02 / AI WORKFLOW</div>
+                  <h3 class="asset-title"><a href="ai-skill-toolkit.html">AI SKILL 工具包</a></h3>
+                  <p class="asset-desc">将输入材料、分析维度、输出结构与设计判断整合成可直接落地的 AI Skill 工具包，支持多业务线快速复用，已进入团队方法资产沉淀流程。</p>
+                  <div class="asset-meta">
+                    <span class="meta-pill">AI 工作流</span>
+                    <span class="meta-pill">AI 设计小组</span>
+                    <span class="meta-pill">评分 8.8</span>
+                  </div>
+                </div>
+                <div class="asset-actions">
+                  <a class="button-secondary" href="ai-skill-toolkit.html">查看详情</a>
+                </div>
+              </article>
+
+              <article class="asset-card glass">
+                <div>
+                  <div class="asset-index">03 / PAGE TEMPLATE</div>
+                  <h3 class="asset-title">业务看板页面模板</h3>
+                  <p class="asset-desc">面向经营分析、项目状态与指标叙事的页面模板资产，帮助设计师快速建立统一结构，让复杂业务信息更容易被管理层理解与采用。</p>
+                  <div class="asset-meta">
+                    <span class="meta-pill">页面模板</span>
+                    <span class="meta-pill">体验设计小组</span>
+                    <span class="meta-pill">18 个模板</span>
+                  </div>
+                </div>
+                <div class="asset-actions">
+                  <a class="button-secondary" href="#">查看详情</a>
+                </div>
+              </article>
+
+              <article class="asset-card glass">
+                <div>
+                  <div class="asset-index">04 / DELIVERY SYSTEM</div>
+                  <h3 class="asset-title">设计交付检查清单</h3>
+                  <p class="asset-desc">统一状态覆盖、交互说明、验收口径与走查标准，让设计交付从个人经验走向团队机制，尤其适合项目复盘和质量治理场景。</p>
+                  <div class="asset-meta">
+                    <span class="meta-pill">交付规范</span>
+                    <span class="meta-pill">设计运营小组</span>
+                    <span class="meta-pill">最近更新 2 天前</span>
+                  </div>
+                </div>
+                <div class="asset-actions">
+                  <a class="button-secondary" href="#">查看详情</a>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <script>
+      document.querySelectorAll(".filter-group, .toolbar-left").forEach((group) => {
+        const chips = group.querySelectorAll(".chip");
+        chips.forEach((chip) => {
+          chip.addEventListener("click", () => {
+            chips.forEach((item) => item.classList.remove("active"));
+            chip.classList.add("active");
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

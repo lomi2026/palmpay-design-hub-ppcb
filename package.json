@@ -1,0 +1,19 @@
+{
+  "name": "palmpay-design-intelligence",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@11.7.0",
+  "engines": {
+    "node": ">=24.0.0",
+    "pnpm": ">=11.0.0"
+  },
+  "scripts": {
+    "build": "pnpm --filter @palmpay/web build && pnpm --filter @palmpay/api build",
+    "dev:web": "pnpm --filter @palmpay/web dev",
+    "dev:api": "pnpm --filter @palmpay/api start:dev",
+    "ppcb:package": "sh deployment/ppcb/create-source-archive.sh",
+    "lint": "pnpm --filter @palmpay/web lint && pnpm --filter @palmpay/api lint",
+    "typecheck": "pnpm --filter @palmpay/web typecheck && pnpm --filter @palmpay/api typecheck",
+    "test": "pnpm --filter @palmpay/api test"
+  }
+}

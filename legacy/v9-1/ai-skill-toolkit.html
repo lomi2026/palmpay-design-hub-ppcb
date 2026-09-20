@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="refresh" content="0; url=index.html#skills" />
+    <title>AI SKILL 工具包 | 设计智能资产平台</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="icon" type="image/png" href="assets/favicon-20260710.png" />
+    <meta name="theme-color" content="#020202" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400;500;600&display=swap" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400;500;600&display=swap" rel="stylesheet" media="print" onload="this.onload=null;this.media='all'" />
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400;500;600&display=swap" rel="stylesheet" /></noscript>
+    <style>
+      :root {
+        --bg: #020202;
+        --panel: rgba(255, 255, 255, 0.05);
+        --line: rgba(255, 255, 255, 0.1);
+        --line-soft: rgba(255, 255, 255, 0.06);
+        --text: #f7f7f5;
+        --muted: rgba(255, 255, 255, 0.68);
+        --muted-soft: rgba(255, 255, 255, 0.46);
+        --radius-xl: 32px;
+        --radius-lg: 24px;
+        --shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+        --max: 1180px;
+        --font-body: "Inter Tight", sans-serif;
+        --weight-body: 200;
+        --weight-ui: 300;
+        --weight-title: 400;
+        --weight-title-strong: 500;
+        --field-focus-border: rgba(255, 255, 255, 0.32);
+        --field-focus-glow: 0 0 0 3px rgba(255, 255, 255, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        background: #020202;
+      }
+
+      body {
+        margin: 0;
+        color: var(--text);
+        font-family: var(--font-body);
+        font-weight: var(--weight-body);
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        background:
+          radial-gradient(circle at 80% 10%, rgba(125, 124, 255, 0.08), transparent 24%),
+          radial-gradient(circle at 18% 0%, rgba(138, 213, 255, 0.06), transparent 22%),
+          linear-gradient(180deg, #010101 0%, #040404 44%, #020202 100%);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      .page {
+        padding: 24px 0 96px;
+      }
+
+      .container {
+        width: min(var(--max), calc(100vw - 32px));
+        margin: 0 auto;
+      }
+
+      .glass {
+        border: 1px solid var(--line);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03));
+        box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+      }
+
+      .topbar {
+        min-height: 80px;
+        padding: 0 16px 0 18px;
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.11), rgba(128, 128, 128, 0.08));
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow:
+          0 18px 60px rgba(0, 0, 0, 0.28),
+          inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(22px);
+        -webkit-backdrop-filter: blur(22px);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 15px;
+        font-weight: var(--weight-ui);
+        letter-spacing: 0;
+        flex-shrink: 0;
+      }
+
+      .brand-mark {
+        width: 38px;
+        height: 38px;
+        border-radius: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        background: transparent;
+        border: 0;
+      }
+
+      .brand-mark img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: contain;
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+        margin-left: auto;
+        margin-right: 32px;
+        color: rgba(255, 255, 255, 0.92);
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+      }
+
+      .nav a {
+        opacity: 1;
+        position: relative;
+        transition: color 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+      }
+
+      .nav a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -8px;
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent);
+        opacity: 0;
+        transform: scaleX(0.72);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+
+      .nav a:hover,
+      .nav a.active {
+        color: rgba(255, 255, 255, 1);
+        transform: translateY(-1px);
+      }
+
+      .nav a:hover::after,
+      .nav a.active::after {
+        opacity: 1;
+        transform: scaleX(1);
+      }
+
+      .chip,
+      .tag,
+      .tab,
+      .search {
+        border-radius: 999px;
+      }
+
+      .button,
+      .button-secondary,
+      .ghost-button,
+      .copy-button {
+        min-height: 56px;
+        padding: 0 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-size: 15px;
+        font-weight: var(--weight-title-strong);
+        letter-spacing: 0.01em;
+        transition: all 0.32s ease;
+      }
+
+      .button:hover,
+      .button-secondary:hover,
+      .ghost-button:hover,
+      .copy-button:hover {
+        transform: translateY(-2px);
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      .button {
+        color: #0b0b0b;
+        background: linear-gradient(180deg, #ffffff 0%, #ebebeb 100%);
+        border-radius: 14px;
+        padding: 0 32px;
+        box-shadow: 0 10px 30px rgba(255, 255, 255, 0.12);
+      }
+
+      .button-secondary,
+      .ghost-button,
+      .copy-button {
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 12px;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.08), rgba(140, 140, 140, 0.06));
+        box-shadow:
+          0 14px 34px rgba(0, 0, 0, 0.2),
+          inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+      }
+      .hero,
+      .toolbar,
+      .summary,
+      .skill-card {
+        margin-top: 24px;
+        border-radius: var(--radius-xl);
+      }
+
+      .hero {
+        padding: 34px 36px 38px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at 86% 16%, rgba(119, 122, 255, 0.14), transparent 24%),
+          linear-gradient(135deg, rgba(255, 255, 255, 0.02), transparent 46%);
+        pointer-events: none;
+      }
+
+      .toolbar,
+      .summary {
+        padding: 22px 24px;
+      }
+
+      .eyebrow,
+      .tag,
+      .tab {
+        display: inline-flex;
+        align-items: center;
+        min-height: 36px;
+        padding: 0 14px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: var(--weight-ui);
+        letter-spacing: 0.05em;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      
+      h1 {
+        margin-top: 18px;
+        max-width: min(100%, 1120px);
+        font-size: clamp(46px, 6vw, 78px);
+        line-height: 0.97;
+        letter-spacing: -0.07em;
+        font-weight: var(--weight-title-strong);
+        text-wrap: pretty;
+      }
+
+      .hero-copy,
+      .summary-copy,
+      .skill-desc {
+        color: var(--muted);
+        line-height: 1.78;
+      }
+
+      .hero-copy {
+        margin-top: 18px;
+        max-width: min(100%, 980px);
+        font-size: 18px;
+      }
+
+      .hero-actions,
+      .hero-meta,
+      .toolbar-main,
+      .toolbar-tabs,
+      .toolbar-right,
+      .summary-grid,
+      .skill-meta,
+      .skill-actions {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .hero-actions,
+      .hero-meta {
+        margin-top: 24px;
+      }
+
+      .hero-meta {
+        color: var(--muted-soft);
+        font-size: 13px;
+      }
+
+      .toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .toolbar-main {
+        flex: 1 1 auto;
+        min-width: 0;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: nowrap;
+      }
+
+      .search {
+        flex: 0 0 360px;
+        min-width: 360px;
+        height: 50px;
+        padding: 0 18px;
+        border: 1px solid var(--line);
+        outline: none;
+        color: #fff;
+        background: rgba(255, 255, 255, 0.05);
+        transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      }
+
+      .search::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .search:focus {
+        border-color: var(--field-focus-border);
+        background: rgba(255, 255, 255, 0.065);
+        box-shadow: var(--field-focus-glow);
+      }
+
+      .toolbar-tabs {
+        flex: 1 1 auto;
+        min-width: 0;
+        gap: 10px;
+        flex-wrap: nowrap;
+        align-items: center;
+      }
+
+      .tab {
+        min-height: 46px;
+        padding: 0 16px;
+        flex: 0 0 auto;
+        cursor: pointer;
+        transition: background 180ms ease, border-color 180ms ease, color 180ms ease;
+      }
+
+      .tab.active {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.14);
+        border-color: rgba(255, 255, 255, 0.18);
+      }
+
+      .summary-grid {
+        display: grid;
+        width: 100%;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 24px;
+        align-items: stretch;
+      }
+
+      .summary-item {
+        padding: 18px;
+        border-radius: 22px;
+        border: 1px solid var(--line-soft);
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .summary-item strong {
+        display: block;
+        font-size: 28px;
+        line-height: 1;
+        letter-spacing: -0.05em;
+        font-weight: var(--weight-title);
+      }
+
+      .summary-item span {
+        display: block;
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.66;
+      }
+
+      .grid {
+        margin-top: 24px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .skill-card {
+        padding: 24px;
+        transition: transform 200ms ease, border-color 200ms ease;
+      }
+
+      .skill-card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(255, 255, 255, 0.16);
+      }
+
+      .skill-head {
+        display: flex;
+        align-items: start;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .mini {
+        color: var(--muted-soft);
+        font-size: 12px;
+        font-weight: var(--weight-ui);
+        letter-spacing: 0.08em;
+      }
+
+      .skill-card h3 {
+        margin-top: 10px;
+        font-size: 34px;
+        line-height: 1.02;
+        letter-spacing: -0.06em;
+        font-weight: var(--weight-title);
+      }
+
+      .skill-desc {
+        margin-top: 14px;
+        font-size: 15px;
+      }
+
+      .skill-meta {
+        margin-top: 16px;
+      }
+
+      .skill-actions {
+        margin-top: 22px;
+        justify-content: space-between;
+      }
+
+      .skill-actions .button-secondary {
+        min-width: 120px;
+      }
+
+      .skill-actions-buttons {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .icon-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--text);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 15px;
+        transition: background 0.2s ease, border-color 0.2s ease;
+      }
+
+      .icon-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.22);
+      }
+
+      .icon-btn.danger:hover {
+        background: rgba(255, 92, 92, 0.14);
+        border-color: rgba(255, 92, 92, 0.4);
+        color: #ff8080;
+      }
+
+      .add-skill-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 18px;
+        flex-wrap: wrap;
+      }
+
+      .auth-bar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 13px;
+      }
+
+      .auth-status {
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .auth-status.is-logged-in {
+        color: #fff;
+        font-weight: var(--weight-ui);
+      }
+
+      .auth-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: var(--weight-title-strong);
+        color: #fff;
+        text-transform: uppercase;
+        flex-shrink: 0;
+      }
+
+      .auth-user-trigger {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 10px 4px 4px;
+        border-radius: 999px;
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
+
+      .auth-user-trigger:hover {
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .auth-dropdown {
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        min-width: 150px;
+        background: #0c0c0f;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 14px;
+        padding: 6px;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+        z-index: 50;
+      }
+
+      .auth-dropdown[hidden] {
+        display: none;
+      }
+
+      .auth-dropdown-item {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 9px;
+        border: none;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 14px;
+        cursor: pointer;
+        text-align: left;
+        transition: background 0.2s ease, color 0.2s ease;
+      }
+
+      .auth-dropdown-item:hover {
+        background: rgba(255, 92, 92, 0.12);
+        color: #ff8080;
+      }
+
+      .auth-dropdown-icon {
+        font-size: 15px;
+        flex-shrink: 0;
+      }
+
+      .auth-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 20px;
+      }
+
+      .auth-tab {
+        flex: 1;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: transparent;
+        color: rgba(255, 255, 255, 0.6);
+        cursor: pointer;
+        font-size: 14px;
+      }
+
+      .auth-tab.active {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.24);
+      }
+
+      .auth-error,
+      .skill-form-error {
+        color: #ff8080;
+        font-size: 13px;
+        margin: -6px 0 16px;
+      }
+
+      .skill-file-status {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-top: 8px;
+      }
+
+      .skill-field-note {
+        margin-top: 8px;
+        font-size: 12px;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      .skill-form-field input[type="file"] {
+        padding: 10px 12px;
+      }
+
+      @media (max-width: 640px) {
+        .add-skill-bar {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .auth-bar {
+          justify-content: space-between;
+        }
+      }
+
+      .upload-skill-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 14px 26px;
+        border-radius: 999px;
+        border: none;
+        background: linear-gradient(180deg, #ffffff 0%, #ebebeb 100%);
+        color: #0b0b0b;
+        font-size: 15px;
+        font-weight: var(--weight-title-strong);
+        cursor: pointer;
+        box-shadow: 0 12px 32px rgba(255, 255, 255, 0.18);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .upload-skill-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 16px 40px rgba(255, 255, 255, 0.26);
+      }
+
+      .skill-modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.68);
+        backdrop-filter: blur(6px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        padding: 24px;
+      }
+
+      .skill-modal-overlay[hidden] {
+        display: none;
+      }
+
+      .skill-modal {
+        width: 100%;
+        max-width: 560px;
+        max-height: 88vh;
+        overflow-y: auto;
+        background: #0c0c0f;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 20px;
+        padding: 28px;
+      }
+
+      .skill-modal h3 {
+        margin: 0 0 20px;
+        font-size: 20px;
+        font-weight: var(--weight-title-strong);
+      }
+
+      .skill-form-field {
+        margin-bottom: 16px;
+      }
+
+      .skill-form-field label {
+        display: block;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 8px;
+      }
+
+      .skill-form-field input,
+      .skill-form-field textarea {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(255, 255, 255, 0.04);
+        color: #fff;
+        font-size: 14px;
+        font-family: inherit;
+        transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      }
+
+      .skill-form-field textarea {
+        min-height: 88px;
+        resize: vertical;
+      }
+
+      #skillSummary {
+        min-height: 148px;
+      }
+
+      .auth-password-wrap {
+        position: relative;
+      }
+
+      .auth-password-wrap input {
+        padding-right: 44px;
+      }
+
+      .auth-password-toggle {
+        position: absolute;
+        top: 50%;
+        right: 6px;
+        transform: translateY(-50%);
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        border: none;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        transition: color 0.2s ease, background 0.2s ease;
+      }
+
+      .auth-password-toggle:hover {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .skill-form-field input:focus,
+      .skill-form-field textarea:focus {
+        outline: none;
+        border-color: var(--field-focus-border);
+        background: rgba(255, 255, 255, 0.065);
+        box-shadow: var(--field-focus-glow);
+      }
+
+      .skill-form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .skill-modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 22px;
+      }
+
+      .skill-modal-actions .button-secondary {
+        min-width: 0;
+      }
+
+      .skill-detail-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.68);
+        backdrop-filter: blur(6px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 110;
+        padding: 24px;
+      }
+
+      .skill-detail-overlay[hidden] {
+        display: none;
+      }
+
+      .skill-detail-modal {
+        width: 100%;
+        max-width: 760px;
+        max-height: 88vh;
+        overflow-y: auto;
+        background: #0c0c0f;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 20px;
+        padding: 28px;
+      }
+
+      .skill-detail-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .skill-detail-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+      }
+
+      .detail-icon-btn {
+        width: 46px;
+        height: 46px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.035));
+        color: rgba(255, 255, 255, 0.9);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, color 0.18s ease;
+      }
+
+      .detail-icon-btn:hover {
+        transform: translateY(-1px);
+        border-color: rgba(255, 255, 255, 0.24);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.045));
+        color: #fff;
+      }
+
+      .detail-icon-btn svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .skill-detail-meta {
+        margin-top: 18px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .skill-detail-section {
+        margin-top: 22px;
+      }
+
+      .skill-detail-section h4 {
+        margin: 0 0 10px;
+        font-size: 14px;
+        font-weight: var(--weight-title-strong);
+        color: rgba(255, 255, 255, 0.72);
+      }
+
+      .skill-detail-content {
+        margin: 0;
+        white-space: pre-wrap;
+        word-break: break-word;
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.86);
+        font-size: 14px;
+      }
+
+      .skill-summary-preview {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        max-width: 100%;
+        line-height: 1.6;
+      }
+
+      @media (max-width: 480px) {
+        .skill-form-row {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 960px) {
+        .nav {
+          display: none;
+        }
+
+        .toolbar {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .summary-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .page {
+          padding-top: 16px;
+        }
+
+        .topbar,
+        .hero,
+        .toolbar,
+        .summary,
+        .skill-card {
+          padding: 20px;
+        }
+
+        
+        
+        h1 {
+          max-width: 100%;
+          font-size: 42px;
+          font-weight: var(--weight-title-strong);
+        }
+
+        .search {
+          min-width: 0;
+          flex-basis: 100%;
+          width: 100%;
+        }
+
+        .toolbar-tabs {
+          width: 100%;
+          flex-wrap: wrap;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="container">
+        <header class="topbar glass">
+          <a class="brand" href="index.html">
+            <span class="brand-mark"><img src="assets/nav-logo-20260710.png" alt="PalmPay UX Design logo" width="108" height="108" /></span>
+            <span>PalmPay UX Design</span>
+          </a>
+          <nav class="nav">
+            <a href="index.html">返回首页</a>
+            <a href="design-assets.html">设计资产</a>
+            <a class="active" href="ai-skill-toolkit.html">AI SKILL</a>
+            <a href="index.html#assets">上传资产</a>
+          </nav>
+          <div class="auth-bar" id="authBar">
+            <div class="auth-user-trigger" id="authUserTrigger" hidden>
+              <span class="auth-avatar" id="authAvatar"></span>
+              <span class="auth-status is-logged-in" id="authStatus"></span>
+              <div class="auth-dropdown" id="authDropdown" hidden>
+                <button type="button" class="auth-dropdown-item" id="authLogoutBtn">
+                  <span class="auth-dropdown-icon">⏻</span>
+                  <span>退出登录</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <section class="hero glass">
+          <div class="eyebrow">AI SKILL Toolkit</div>
+          <h1>把 Prompt 升级成真正可管理、可复制、可复用的 Skill 系统</h1>
+          <p class="hero-copy">这一页不再是简单堆几个卡片，而是开始接近产品化 Skill 中心的形态。你可以继续在这里扩展筛选、搜索、收藏、下载、版本记录和更完整的详情页链路。</p>
+          <div class="hero-meta">
+            <span>4 个核心 Skill</span>
+            <span>可继续扩展分类 / 收藏 / 版本</span>
+            <span>已接详情页与复制链路</span>
+          </div>
+        </section>
+
+        <section class="toolbar glass">
+          <div class="toolbar-main">
+            <input class="search" type="search" placeholder="搜索 Skill 名称、适用场景、归属团队..." />
+            <div class="toolbar-tabs">
+              <button class="tab active" type="button">全部</button>
+              <button class="tab" type="button">策略研究</button>
+              <button class="tab" type="button">组件治理</button>
+              <button class="tab" type="button">页面模板</button>
+              <button class="tab" type="button">质量治理</button>
+            </div>
+          </div>
+          <div class="toolbar-right">
+            <button type="button" class="upload-skill-btn" id="addSkillBtn">＋ 上传 Skill</button>
+          </div>
+        </section>
+
+        <section class="summary glass">
+          <div class="summary-grid">
+            <div class="summary-item">
+              <strong>04</strong>
+              <span>覆盖 4 个典型 AI 设计方法资产方向。</span>
+            </div>
+            <div class="summary-item">
+              <strong>8.8</strong>
+              <span>当前示例评分与精选标准保持统一表达。</span>
+            </div>
+            <div class="summary-item">
+              <strong>1 Click</strong>
+              <span>详情页支持一键复制，便于继续沉淀或外部演示。</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="grid" id="skillGrid"></section>
+      </div>
+    </div>
+
+    <div class="skill-modal-overlay" id="authModalOverlay" hidden>
+      <div class="skill-modal">
+        <h3 id="authModalTitle">登录</h3>
+        <div class="auth-tabs">
+          <button type="button" class="auth-tab active" id="authTabLogin">登录</button>
+          <button type="button" class="auth-tab" id="authTabRegister">注册</button>
+        </div>
+        <form id="authForm">
+          <div class="skill-form-field">
+            <label for="authUsername">用户名</label>
+            <input type="text" id="authUsername" required placeholder="至少 2 个字符" />
+          </div>
+          <div class="skill-form-field">
+            <label for="authPassword">密码</label>
+            <div class="auth-password-wrap">
+              <input type="password" id="authPassword" required placeholder="至少 6 位" minlength="6" />
+              <button type="button" class="auth-password-toggle" id="authPasswordToggle" aria-label="显示/隐藏密码">👁</button>
+            </div>
+          </div>
+          <div class="auth-error" id="authError" hidden></div>
+          <div class="skill-modal-actions">
+            <button type="button" class="button-secondary" id="authCancelBtn">取消</button>
+            <button type="submit" class="button" id="authSubmitBtn">登录</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="skill-modal-overlay" id="skillModalOverlay" hidden>
+      <div class="skill-modal">
+        <h3 id="skillModalTitle">新建 Skill</h3>
+        <form id="skillForm">
+          <input type="hidden" id="skillId" />
+          <div class="skill-form-field">
+            <label for="skillTitle">Skill 名称</label>
+            <input type="text" id="skillTitle" required placeholder="例如：AI 竞品拆解 Skill" />
+          </div>
+          <div class="skill-form-row">
+            <div class="skill-form-field">
+              <label for="skillCategory">分类标签</label>
+              <input type="text" id="skillCategory" required placeholder="例如：策略研究" />
+            </div>
+            <div class="skill-form-field">
+              <label for="skillStage">适用阶段</label>
+              <input type="text" id="skillStage" required placeholder="例如：方案前期" />
+            </div>
+          </div>
+          <div class="skill-form-field">
+            <label for="skillTeam">归属团队</label>
+            <input type="text" id="skillTeam" required placeholder="例如：AI 设计小组" />
+          </div>
+          <div class="skill-form-field">
+            <label for="skillDesc">描述</label>
+            <textarea id="skillDesc" required placeholder="这个 Skill 输入什么、输出什么、适合什么场景"></textarea>
+          </div>
+          <div class="skill-form-field">
+            <label for="skillSummary">Skill 内容（可直接粘贴，推荐）</label>
+            <textarea
+              id="skillSummary"
+              placeholder="把完整的 Skill 内容直接粘贴到这里。即使附件暂时上传失败，用户也仍然可以在站内查看具体内容。"
+            ></textarea>
+            <div class="skill-field-note">支持直接粘贴 Markdown、提示词正文、使用步骤、输入输出规范等内容。</div>
+          </div>
+          <div class="skill-form-field">
+            <label for="skillFile">附件（可选，最大 8MB）</label>
+            <input type="file" id="skillFile" />
+            <div class="skill-file-status" id="skillFileStatus"></div>
+            <div class="skill-field-note">附件上传目前不稳定。建议优先粘贴 Skill 内容；如果附件上传失败，也可以继续保存文本版。</div>
+          </div>
+          <div class="skill-form-error" id="skillFormError" hidden></div>
+          <div class="skill-modal-actions">
+            <button type="button" class="button-secondary" id="skillCancelBtn">取消</button>
+            <button type="submit" class="button" id="skillSubmitBtn">保存</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="skill-detail-overlay" id="skillDetailOverlay" hidden>
+      <div class="skill-detail-modal">
+        <div class="skill-detail-top">
+          <div>
+            <div class="mini" id="skillDetailOwner"></div>
+            <h3 id="skillDetailTitle" style="margin-top: 10px; font-size: 28px; font-weight: var(--weight-title-strong);"></h3>
+          </div>
+          <div class="skill-detail-actions">
+            <button type="button" class="detail-icon-btn" id="skillDetailCopyBtn" aria-label="复制 Skill 内容" title="复制 Skill 内容">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="9" y="9" width="10" height="10" rx="2"></rect>
+                <path d="M7 15H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v1"></path>
+              </svg>
+            </button>
+            <button type="button" class="detail-icon-btn" id="skillDetailCloseBtn" aria-label="关闭详情" title="关闭">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M18 6L6 18"></path>
+                <path d="M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="skill-detail-meta" id="skillDetailMeta"></div>
+        <div class="skill-detail-section">
+          <h4>描述</h4>
+          <p class="skill-detail-content" id="skillDetailDesc"></p>
+        </div>
+        <div class="skill-detail-section" id="skillDetailContentSection">
+          <h4>Skill 内容</h4>
+          <p class="skill-detail-content" id="skillDetailContent"></p>
+        </div>
+        <div class="skill-detail-section" id="skillDetailFileSection">
+          <h4>附件</h4>
+          <p><a class="button-secondary" id="skillDetailFileLink" href="#" target="_blank" rel="noopener">打开附件</a></p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const tabs = document.querySelectorAll(".tab");
+      tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          tabs.forEach((item) => item.classList.remove("active"));
+          tab.classList.add("active");
+        });
+      });
+
+      // ---- API 配置 ----
+      const API_BASE = "";
+      const AUTH_TOKEN_KEY = "palmpay_auth_token";
+      const AUTH_USER_KEY = "palmpay_auth_username";
+
+      function escapeHtml(str) {
+        const div = document.createElement("div");
+        div.textContent = str == null ? "" : String(str);
+        return div.innerHTML;
+      }
+
+      function getToken() {
+        return localStorage.getItem(AUTH_TOKEN_KEY) || "";
+      }
+
+      function getUsername() {
+        return localStorage.getItem(AUTH_USER_KEY) || "";
+      }
+
+      function setAuth(token, username) {
+        localStorage.setItem(AUTH_TOKEN_KEY, token);
+        localStorage.setItem(AUTH_USER_KEY, username);
+      }
+
+      function clearAuth() {
+        localStorage.removeItem(AUTH_TOKEN_KEY);
+        localStorage.removeItem(AUTH_USER_KEY);
+      }
+
+      async function apiFetch(path, options = {}) {
+        const headers = options.headers || {};
+        const token = getToken();
+        if (token) headers["Authorization"] = "Bearer " + token;
+        const res = await fetch(API_BASE + path, { ...options, headers });
+        let data = null;
+        try {
+          data = await res.json();
+        } catch (e) {
+          data = null;
+        }
+        if (!res.ok) {
+          const message = (data && data.error) || "请求失败，请稍后重试";
+          throw new Error(message);
+        }
+        return data;
+      }
+
+      async function readFileAsBase64(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onerror = () => reject(new Error("读取文件失败，请稍后重试"));
+          reader.onload = () => {
+            if (typeof reader.result !== "string") {
+              reject(new Error("读取文件失败，请稍后重试"));
+              return;
+            }
+            const commaIndex = reader.result.indexOf(",");
+            resolve(commaIndex >= 0 ? reader.result.slice(commaIndex + 1) : reader.result);
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      async function uploadFile(file) {
+        const contentBase64 = await readFileAsBase64(file);
+        return apiFetch("/api/upload", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: file.name, contentBase64 }),
+        });
+      }
+
+      // ---- 登录状态栏 ----
+      const authStatus = document.getElementById("authStatus");
+      const authLogoutBtn = document.getElementById("authLogoutBtn");
+      const authModalOverlay = document.getElementById("authModalOverlay");
+      const authModalTitle = document.getElementById("authModalTitle");
+      const authForm = document.getElementById("authForm");
+      const authTabLogin = document.getElementById("authTabLogin");
+      const authTabRegister = document.getElementById("authTabRegister");
+      const authCancelBtn = document.getElementById("authCancelBtn");
+      const authError = document.getElementById("authError");
+      const authSubmitBtn = document.getElementById("authSubmitBtn");
+      const authPasswordInput = document.getElementById("authPassword");
+      const authPasswordToggle = document.getElementById("authPasswordToggle");
+      if (authPasswordToggle && authPasswordInput) {
+        authPasswordToggle.addEventListener("click", () => {
+          const isPassword = authPasswordInput.type === "password";
+          authPasswordInput.type = isPassword ? "text" : "password";
+          authPasswordToggle.textContent = isPassword ? "🙈" : "👁";
+        });
+      }
+      const authAvatar = document.getElementById("authAvatar");
+      const authUserTrigger = document.getElementById("authUserTrigger");
+      const authDropdown = document.getElementById("authDropdown");
+      let authMode = "login";
+
+      const AVATAR_COLORS = ["#6255B8", "#3D8BFD", "#22A06B", "#E8863B", "#D14D72", "#5FA8D3", "#9B6BFF"];
+
+      function colorForUsername(name) {
+        let hash = 0;
+        for (let i = 0; i < name.length; i++) {
+          hash = (hash * 31 + name.charCodeAt(i)) >>> 0;
+        }
+        return AVATAR_COLORS[hash % AVATAR_COLORS.length];
+      }
+
+      function updateAuthBar() {
+        const username = getUsername();
+        if (username) {
+          authStatus.textContent = username;
+          authUserTrigger.hidden = false;
+          authAvatar.textContent = username.trim().charAt(0);
+          authAvatar.style.background = colorForUsername(username);
+        } else {
+          authUserTrigger.hidden = true;
+          authDropdown.hidden = true;
+        }
+      }
+
+      if (authUserTrigger) {
+        authUserTrigger.addEventListener("click", (e) => {
+          e.stopPropagation();
+          authDropdown.hidden = !authDropdown.hidden;
+        });
+        document.addEventListener("click", (e) => {
+          if (!authUserTrigger.contains(e.target)) authDropdown.hidden = true;
+        });
+      }
+
+      function openAuthModal(mode) {
+        authMode = mode;
+        authError.hidden = true;
+        authForm.reset();
+        if (mode === "login") {
+          authModalTitle.textContent = "登录";
+          authTabLogin.classList.add("active");
+          authTabRegister.classList.remove("active");
+          authSubmitBtn.textContent = "登录";
+        } else {
+          authModalTitle.textContent = "注册";
+          authTabRegister.classList.add("active");
+          authTabLogin.classList.remove("active");
+          authSubmitBtn.textContent = "注册";
+        }
+        authModalOverlay.hidden = false;
+        document.getElementById("authUsername").focus();
+      }
+
+      function closeAuthModal() {
+        authModalOverlay.hidden = true;
+      }
+
+      authTabLogin.addEventListener("click", () => openAuthModal("login"));
+      authTabRegister.addEventListener("click", () => openAuthModal("register"));
+      authCancelBtn.addEventListener("click", closeAuthModal);
+      authModalOverlay.addEventListener("click", (e) => {
+        if (e.target === authModalOverlay) closeAuthModal();
+      });
+
+      authLogoutBtn.addEventListener("click", async () => {
+        try {
+          await apiFetch("/api/logout", { method: "POST" });
+        } catch (e) {
+          // 忽略退出请求失败，仍然清除本地登录态
+        }
+        clearAuth();
+        updateAuthBar();
+        renderSkills();
+      });
+
+      authForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        authError.hidden = true;
+        const username = document.getElementById("authUsername").value.trim();
+        const password = document.getElementById("authPassword").value;
+        const endpoint = authMode === "login" ? "/api/login" : "/api/register";
+        authSubmitBtn.disabled = true;
+        try {
+          const data = await apiFetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password }),
+          });
+          setAuth(data.token, data.username);
+          updateAuthBar();
+          closeAuthModal();
+          renderSkills();
+        } catch (err) {
+          authError.textContent = err.message;
+          authError.hidden = false;
+        } finally {
+          authSubmitBtn.disabled = false;
+        }
+      });
+
+      // ---- Skill CRUD（数据存在云端，所有人可见；增删改需要登录，且只能操作自己创建的）----
+      const skillGrid = document.getElementById("skillGrid");
+      const skillModalOverlay = document.getElementById("skillModalOverlay");
+      const skillModalTitle = document.getElementById("skillModalTitle");
+      const skillForm = document.getElementById("skillForm");
+      const addSkillBtn = document.getElementById("addSkillBtn");
+      const skillCancelBtn = document.getElementById("skillCancelBtn");
+      const skillFormError = document.getElementById("skillFormError");
+      const skillSubmitBtn = document.getElementById("skillSubmitBtn");
+      const skillFileInput = document.getElementById("skillFile");
+      const skillFileStatus = document.getElementById("skillFileStatus");
+      const skillDetailOverlay = document.getElementById("skillDetailOverlay");
+      const skillDetailCopyBtn = document.getElementById("skillDetailCopyBtn");
+      const skillDetailCloseBtn = document.getElementById("skillDetailCloseBtn");
+      let currentSkillFileUrl = "";
+      let currentSkillFileName = "";
+      let cachedSkills = [];
+      let currentDetailSkill = null;
+
+      async function loadSkills() {
+        const data = await apiFetch("/api/skills");
+        return data.skills || [];
+      }
+
+      async function renderSkills() {
+        try {
+          cachedSkills = await loadSkills();
+        } catch (err) {
+          skillGrid.innerHTML = `<p class="mini" style="grid-column: 1 / -1;">加载失败：${escapeHtml(err.message)}</p>`;
+          return;
+        }
+        const username = getUsername();
+        skillGrid.innerHTML = "";
+        cachedSkills.forEach((skill, index) => {
+          const article = document.createElement("article");
+          article.className = "skill-card glass";
+          const number = "SKILL " + String(index + 1).padStart(2, "0");
+          const titleHtml = skill.detail_url
+            ? `<a href="${escapeHtml(skill.detail_url)}">${escapeHtml(skill.title)}</a>`
+            : escapeHtml(skill.title);
+          const detailBtnHtml = skill.detail_url
+            ? `<a class="button-secondary" href="${escapeHtml(skill.detail_url)}">查看详情</a>`
+            : `<button type="button" class="button-secondary" data-action="view" data-id="${skill.id}">查看详情</button>`;
+          const isOwner = username && skill.owner_username === username;
+          const ownerActionsHtml = isOwner
+            ? `<button type="button" class="icon-btn" data-action="edit" data-id="${skill.id}" aria-label="编辑 Skill" title="编辑">✎</button>
+               <button type="button" class="icon-btn danger" data-action="delete" data-id="${skill.id}" aria-label="删除 Skill" title="删除">✕</button>`
+            : "";
+          const fileHtml = skill.file_url
+            ? `<a class="mini" href="${escapeHtml(skill.file_url)}" target="_blank" rel="noopener">📎 ${escapeHtml(skill.file_name || "附件")}</a>`
+            : "";
+          const summaryPreview = skill.summary
+            ? `<span class="mini skill-summary-preview">${escapeHtml(skill.summary)}</span>`
+            : `<span class="mini" style="opacity: 0.42;">未填写 Skill 内容</span>`;
+
+          article.innerHTML = `
+            <div class="skill-head">
+              <div>
+                <div class="mini">${number}</div>
+                <h3>${titleHtml}</h3>
+              </div>
+              <span class="tag">${escapeHtml(skill.category)}</span>
+            </div>
+            <p class="skill-desc">${escapeHtml(skill.description)}</p>
+            <div class="skill-meta">
+              <span class="tag">${escapeHtml(skill.stage)}</span>
+              <span class="tag">${escapeHtml(skill.team)}</span>
+            </div>
+            <div class="mini" style="margin-top: 10px; opacity: 0.6;">by ${escapeHtml(skill.owner_username || "")}</div>
+            ${fileHtml ? `<div style="margin-top: 8px;">${fileHtml}</div>` : ""}
+            <div class="skill-actions">
+              ${summaryPreview}
+              <div class="skill-actions-buttons">
+                ${detailBtnHtml}
+                ${ownerActionsHtml}
+              </div>
+            </div>
+          `;
+          skillGrid.appendChild(article);
+        });
+        if (!cachedSkills.length) {
+          skillGrid.innerHTML = `<p class="mini" style="grid-column: 1 / -1;">还没有 Skill，来新建第一个吧。</p>`;
+        }
+      }
+
+      function openModal(skill) {
+        skillFormError.hidden = true;
+        currentSkillFileUrl = skill ? skill.file_url || "" : "";
+        currentSkillFileName = skill ? skill.file_name || "" : "";
+        skillFileInput.value = "";
+        skillFileStatus.textContent = currentSkillFileName ? "已上传：" + currentSkillFileName : "";
+        skillModalTitle.textContent = skill ? "编辑 Skill" : "新建 Skill";
+        document.getElementById("skillId").value = skill ? skill.id : "";
+        document.getElementById("skillTitle").value = skill ? skill.title : "";
+        document.getElementById("skillCategory").value = skill ? skill.category : "";
+        document.getElementById("skillStage").value = skill ? skill.stage.replace(/^适用阶段[:：]\s*/, "") : "";
+        document.getElementById("skillTeam").value = skill ? skill.team.replace(/^归属[:：]\s*/, "") : "";
+        document.getElementById("skillDesc").value = skill ? skill.description : "";
+        document.getElementById("skillSummary").value = skill ? skill.summary : "";
+        skillModalOverlay.hidden = false;
+        document.getElementById("skillTitle").focus();
+      }
+
+      function closeModal() {
+        skillModalOverlay.hidden = true;
+        skillForm.reset();
+      }
+
+      function openSkillDetail(skill) {
+        currentDetailSkill = skill;
+        document.getElementById("skillDetailOwner").textContent = `by ${skill.owner_username || ""}`;
+        document.getElementById("skillDetailTitle").textContent = skill.title || "";
+        document.getElementById("skillDetailDesc").textContent = skill.description || "暂无描述";
+        document.getElementById("skillDetailContent").textContent = skill.summary || "暂未提供详细 Skill 内容。";
+        document.getElementById("skillDetailContentSection").hidden = !skill.summary;
+        document.getElementById("skillDetailFileSection").hidden = !skill.file_url;
+        const fileLink = document.getElementById("skillDetailFileLink");
+        if (skill.file_url) {
+          fileLink.href = skill.file_url;
+          fileLink.textContent = skill.file_name ? `打开附件：${skill.file_name}` : "打开附件";
+        }
+
+        const meta = document.getElementById("skillDetailMeta");
+        meta.innerHTML = `
+          <span class="tag">${escapeHtml(skill.category || "")}</span>
+          <span class="tag">${escapeHtml(skill.stage || "")}</span>
+          <span class="tag">${escapeHtml(skill.team || "")}</span>
+        `;
+        skillDetailOverlay.hidden = false;
+      }
+
+      function closeSkillDetail() {
+        skillDetailOverlay.hidden = true;
+      }
+
+      async function copySkillDetail() {
+        if (!currentDetailSkill) return;
+        const parts = [
+          currentDetailSkill.title || "",
+          currentDetailSkill.category ? `分类：${currentDetailSkill.category}` : "",
+          currentDetailSkill.stage || "",
+          currentDetailSkill.team || "",
+          "",
+          "描述",
+          currentDetailSkill.description || "",
+          "",
+          "Skill 内容",
+          currentDetailSkill.summary || "",
+        ].filter(Boolean);
+        const text = parts.join("\n");
+        try {
+          await navigator.clipboard.writeText(text);
+          skillDetailCopyBtn.title = "已复制";
+          skillDetailCopyBtn.setAttribute("aria-label", "已复制");
+          setTimeout(() => {
+            skillDetailCopyBtn.title = "复制 Skill 内容";
+            skillDetailCopyBtn.setAttribute("aria-label", "复制 Skill 内容");
+          }, 1200);
+        } catch (error) {
+          window.alert("复制失败，请稍后重试");
+        }
+      }
+
+      addSkillBtn.addEventListener("click", () => {
+        if (!getUsername()) {
+          openAuthModal("login");
+          return;
+        }
+        openModal(null);
+      });
+      skillCancelBtn.addEventListener("click", closeModal);
+      skillDetailCopyBtn.addEventListener("click", copySkillDetail);
+      skillDetailCloseBtn.addEventListener("click", closeSkillDetail);
+      skillModalOverlay.addEventListener("click", (e) => {
+        if (e.target === skillModalOverlay) closeModal();
+      });
+      skillDetailOverlay.addEventListener("click", (e) => {
+        if (e.target === skillDetailOverlay) closeSkillDetail();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          if (!skillModalOverlay.hidden) closeModal();
+          if (!skillDetailOverlay.hidden) closeSkillDetail();
+          if (!authModalOverlay.hidden) closeAuthModal();
+        }
+      });
+
+      skillFileInput.addEventListener("change", () => {
+        const file = skillFileInput.files && skillFileInput.files[0];
+        if (file) {
+          skillFileStatus.textContent = `已选择：${file.name}（${(file.size / 1024).toFixed(0)}KB，保存时上传）`;
+        }
+      });
+
+      skillForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        skillFormError.hidden = true;
+        const id = document.getElementById("skillId").value;
+        const title = document.getElementById("skillTitle").value.trim();
+        const category = document.getElementById("skillCategory").value.trim();
+        const stageRaw = document.getElementById("skillStage").value.trim();
+        const teamRaw = document.getElementById("skillTeam").value.trim();
+        const description = document.getElementById("skillDesc").value.trim();
+        const summary = document.getElementById("skillSummary").value.trim();
+
+        if (!title || !category || !stageRaw || !teamRaw || !description) return;
+
+        skillSubmitBtn.disabled = true;
+        skillSubmitBtn.textContent = "保存中...";
+
+        try {
+          let fileUrl = currentSkillFileUrl;
+          let fileName = currentSkillFileName;
+          const file = skillFileInput.files && skillFileInput.files[0];
+          if (file) {
+            if (file.size > 8 * 1024 * 1024) {
+              throw new Error("文件不能超过 8MB");
+            }
+            skillSubmitBtn.textContent = "上传文件中...";
+            try {
+              const uploadRes = await uploadFile(file);
+              fileUrl = uploadRes.url;
+              fileName = uploadRes.name;
+            } catch (uploadError) {
+              const continueWithoutFile = window.confirm(
+                `附件上传暂时失败：${uploadError.message}\n\n是否忽略这次附件，继续保存文本内容？`
+              );
+              if (!continueWithoutFile) {
+                throw uploadError;
+              }
+              skillFileStatus.textContent = "附件上传失败，已忽略附件并继续保存文本内容。";
+            }
+            skillSubmitBtn.textContent = "保存中...";
+          }
+
+          const payload = {
+            title,
+            category,
+            stage: "适用阶段：" + stageRaw,
+            team: "归属：" + teamRaw,
+            description,
+            summary,
+            file_url: fileUrl || null,
+            file_name: fileName || null,
+          };
+
+          if (id) {
+            await apiFetch("/api/skills/" + encodeURIComponent(id), {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+          } else {
+            await apiFetch("/api/skills", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+          }
+
+          await renderSkills();
+          closeModal();
+        } catch (err) {
+          skillFormError.textContent = err.message;
+          skillFormError.hidden = false;
+        } finally {
+          skillSubmitBtn.disabled = false;
+          skillSubmitBtn.textContent = "保存";
+        }
+      });
+
+      skillGrid.addEventListener("click", async (e) => {
+        const btn = e.target.closest("[data-action]");
+        if (!btn) return;
+        const action = btn.dataset.action;
+        const id = btn.dataset.id;
+        const skill = cachedSkills.find((s) => s.id === id);
+        if (!skill) return;
+
+        if (action === "edit") {
+          openModal(skill);
+        } else if (action === "delete") {
+          const confirmed = window.confirm(`确定要删除「${skill.title}」这个 Skill 吗？此操作无法撤销。`);
+          if (confirmed) {
+            try {
+              await apiFetch("/api/skills/" + encodeURIComponent(id), { method: "DELETE" });
+              await renderSkills();
+            } catch (err) {
+              alert("删除失败：" + err.message);
+            }
+          }
+        } else if (action === "view") {
+          openSkillDetail(skill);
+        }
+      });
+
+      updateAuthBar();
+      renderSkills();
+    </script>
+
+  </body>
+</html>

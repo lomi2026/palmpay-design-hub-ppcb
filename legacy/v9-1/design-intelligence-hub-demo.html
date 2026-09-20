@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>建设版 | PalmPay UX Design</title>
+    <link rel="icon" type="image/png" href="assets/favicon-20260710.png" />
+    <meta name="theme-color" content="#081018" />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #081018;
+        --panel: rgba(13, 28, 43, 0.9);
+        --line: rgba(255, 255, 255, 0.12);
+        --text: #f5f8fb;
+        --muted: #9db3c4;
+        --accent: #ffcb47;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        font-family: "Inter Tight", "PingFang SC", "Microsoft YaHei", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(255, 203, 71, 0.2), transparent 28%),
+          radial-gradient(circle at bottom right, rgba(42, 156, 255, 0.2), transparent 24%),
+          linear-gradient(160deg, #050b12 0%, #091522 48%, #06111c 100%);
+      }
+
+      main {
+        width: min(760px, 100%);
+        padding: 40px;
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        background: var(--panel);
+        backdrop-filter: blur(18px);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--accent);
+        font-size: 14px;
+        letter-spacing: 0.08em;
+      }
+
+      h1 {
+        margin: 20px 0 12px;
+        font-size: clamp(36px, 6vw, 60px);
+        line-height: 1.02;
+      }
+
+      p {
+        margin: 0;
+        font-size: 18px;
+        line-height: 1.7;
+        color: var(--muted);
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-top: 28px;
+      }
+
+      a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: 0 20px;
+        border-radius: 999px;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .primary {
+        color: #081018;
+        background: var(--accent);
+      }
+
+      .secondary {
+        color: var(--text);
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.04);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="eyebrow">DEMO PAGE</div>
+      <h1>建设版页面已就绪</h1>
+      <p>
+        这个入口原本在站点里有链接，但源目录里缺少对应文件。现在我已经补成一个可访问页面，避免 Cloudflare
+        部署后点击出现 404。后续如果你有正式内容，直接替换这个文件即可。
+      </p>
+      <div class="actions">
+        <a class="primary" href="index.html">返回首页</a>
+        <a class="secondary" href="design-assets.html">查看设计资产</a>
+      </div>
+    </main>
+  </body>
+</html>

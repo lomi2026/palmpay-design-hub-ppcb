@@ -1,0 +1,18 @@
+node_modules/
+.pnpm-store/
+.next/
+dist/
+build/
+coverage/
+.env
+.env.*
+!.env.example
+.DS_Store
+*.log
+*.tsbuildinfo
+apps/api/src/generated/prisma/
+
+.next-*/
+
+# Independent PPCB repository: keep every environment file local.
+.env*

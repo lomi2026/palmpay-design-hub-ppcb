@@ -1,0 +1,813 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum OrganizationStatus {
+  ACTIVE
+  DISABLED
+}
+
+enum TeamStatus {
+  ACTIVE
+  DISABLED
+}
+
+enum UserStatus {
+  INVITED
+  ACTIVE
+  DISABLED
+}
+
+enum RoleScopeType {
+  ORGANIZATION
+  TEAM
+}
+
+enum CategoryStatus {
+  ACTIVE
+  DISABLED
+}
+
+enum ContentType {
+  AI_TOOL
+  DESIGN_ASSET
+  AI_SKILL
+  AI_CASE
+  AI_PROJECT
+}
+
+enum ContentStatus {
+  DRAFT
+  IN_REVIEW
+  CHANGES_REQUESTED
+  APPROVED
+  PUBLISHED
+  UNPUBLISHED
+  ARCHIVED
+}
+
+enum ReviewRequestStatus {
+  PENDING           @map("pending")
+  APPROVED          @map("approved")
+  CHANGES_REQUESTED @map("changes_requested")
+  CANCELLED         @map("cancelled")
+}
+
+enum ReviewActionType {
+  ASSIGN          @map("assign")
+  COMMENT         @map("comment")
+  APPROVE         @map("approve")
+  REQUEST_CHANGES @map("request_changes")
+  CANCEL          @map("cancel")
+}
+
+enum NotificationChannel {
+  IN_APP @map("in_app")
+  EMAIL  @map("email")
+}
+
+enum NotificationStatus {
+  PENDING @map("pending")
+  SENT    @map("sent")
+  FAILED  @map("failed")
+}
+
+enum ContentVisibility {
+  PUBLIC       @map("public")
+  ORGANIZATION @map("organization")
+  TEAM         @map("team")
+  RESTRICTED   @map("restricted")
+}
+
+enum VerificationStatus {
+  UNVERIFIED
+  INTERNAL_TRIAL
+  PILOT
+  VERIFIED
+  INVALIDATED
+}
+
+enum TagStatus {
+  ACTIVE   @map("active")
+  MERGED   @map("merged")
+  DISABLED @map("disabled")
+}
+
+enum FileAccessLevel {
+  PUBLIC     @map("public")
+  INTERNAL   @map("internal")
+  RESTRICTED @map("restricted")
+}
+
+enum UploadStatus {
+  UPLOADING @map("uploading")
+  READY     @map("ready")
+  FAILED    @map("failed")
+  DELETED   @map("deleted")
+}
+
+enum AttachmentEntityType {
+  CONTENT @map("content")
+  VERSION @map("version")
+  REVIEW  @map("review")
+  AI_RUN  @map("ai_run")
+}
+
+enum AttachmentUsageType {
+  COVER      @map("cover")
+  ATTACHMENT @map("attachment")
+  INPUT      @map("input")
+  OUTPUT     @map("output")
+  EVIDENCE   @map("evidence")
+}
+
+enum DataSecurityLevel {
+  PUBLIC       @map("public")
+  INTERNAL     @map("internal")
+  CONFIDENTIAL @map("confidential")
+}
+
+enum AIProjectStage {
+  EXPLORING
+  PENDING_EVALUATION
+  READY
+  PILOTING
+  VERIFIED
+  PAUSED
+  TERMINATED
+}
+
+enum Priority {
+  HIGH   @map("high")
+  MEDIUM @map("medium")
+  LOW    @map("low")
+}
+
+enum EvidenceType {
+  DATA       @map("data")
+  RESEARCH   @map("research")
+  REVIEW     @map("review")
+  ATTACHMENT @map("attachment")
+}
+
+enum EvidenceVerificationStatus {
+  PENDING  @map("pending")
+  VERIFIED @map("verified")
+  REJECTED @map("rejected")
+}
+
+enum ContentRelationType {
+  RELATED      @map("related")
+  USES         @map("uses")
+  EVIDENCE_FOR @map("evidence_for")
+  DERIVED_FROM @map("derived_from")
+}
+
+model Organization {
+  id        String             @id @default(uuid()) @db.Uuid
+  name      String             @db.VarChar(100)
+  code      String             @unique @db.VarChar(50)
+  status    OrganizationStatus @default(ACTIVE)
+  settings  Json?
+  createdAt DateTime           @default(now()) @map("created_at")
+  updatedAt DateTime           @updatedAt @map("updated_at")
+
+  teams       Team[]
+  users       User[]
+  roles       Role[]
+  categories  Category[]
+  contents    Content[]
+  tags        Tag[]
+  files       FileAttachment[]
+  usageEvents UsageEvent[]
+  searchLogs  SearchLog[]
+  auditLogs   AuditLog[]
+
+  @@map("organizations")
+}
+
+model Team {
+  id             String     @id @default(uuid()) @db.Uuid
+  organizationId String     @map("organization_id") @db.Uuid
+  parentId       String?    @map("parent_id") @db.Uuid
+  ownerId        String?    @map("owner_id") @db.Uuid
+  name           String     @db.VarChar(100)
+  code           String     @db.VarChar(50)
+  status         TeamStatus @default(ACTIVE)
+  createdAt      DateTime   @default(now()) @map("created_at")
+  updatedAt      DateTime   @updatedAt @map("updated_at")
+
+  organization      Organization      @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  parent            Team?             @relation("TeamHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  children          Team[]            @relation("TeamHierarchy")
+  owner             User?             @relation("OwnedTeams", fields: [ownerId], references: [id], onDelete: SetNull)
+  members           User[]            @relation("PrimaryTeam")
+  contents          Content[]
+  suggestedProjects AIProjectDetail[]
+
+  @@unique([organizationId, code])
+  @@index([organizationId])
+  @@index([parentId])
+  @@index([ownerId])
+  @@map("teams")
+}
+
+model User {
+  id             String     @id @default(uuid()) @db.Uuid
+  organizationId String     @map("organization_id") @db.Uuid
+  primaryTeamId  String?    @map("primary_team_id") @db.Uuid
+  employeeId     String?    @unique @map("employee_id") @db.VarChar(100)
+  name           String     @db.VarChar(100)
+  email          String     @db.VarChar(320)
+  avatarUrl      String?    @map("avatar_url")
+  status         UserStatus @default(INVITED)
+  locale         String     @default("zh-CN") @db.VarChar(20)
+  lastLoginAt    DateTime?  @map("last_login_at")
+  createdAt      DateTime   @default(now()) @map("created_at")
+  updatedAt      DateTime   @updatedAt @map("updated_at")
+  deletedAt      DateTime?  @map("deleted_at")
+
+  organization            Organization      @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  primaryTeam             Team?             @relation("PrimaryTeam", fields: [primaryTeamId], references: [id], onDelete: SetNull)
+  ownedTeams              Team[]            @relation("OwnedTeams")
+  userRoles               UserRole[]
+  ownedContents           Content[]         @relation("ContentOwner")
+  createdContents         Content[]         @relation("ContentCreator")
+  createdVersions         ContentVersion[]
+  uploadedFiles           FileAttachment[]
+  createdContentTags      ContentTag[]
+  verifiedCaseEvidence    CaseEvidence[]
+  createdContentRelations ContentRelation[]
+  submittedReviewRequests ReviewRequest[]   @relation("SubmittedReviews")
+  assignedReviewRequests  ReviewRequest[]   @relation("AssignedReviews")
+  reviewActions           ReviewAction[]
+  notifications           Notification[]
+  favorites               Favorite[]
+  recentViews             RecentView[]
+  usageEvents             UsageEvent[]
+  searchLogs              SearchLog[]
+  auditLogs               AuditLog[]
+
+  @@unique([organizationId, email])
+  @@index([organizationId])
+  @@index([primaryTeamId])
+  @@map("users")
+}
+
+model Role {
+  id             String   @id @default(uuid()) @db.Uuid
+  organizationId String?  @map("organization_id") @db.Uuid
+  code           String   @unique @db.VarChar(100)
+  name           String   @db.VarChar(100)
+  description    String?
+  isSystem       Boolean  @default(false) @map("is_system")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  organization    Organization?    @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  userRoles       UserRole[]
+  rolePermissions RolePermission[]
+
+  @@index([organizationId])
+  @@map("roles")
+}
+
+model Permission {
+  id          String   @id @default(uuid()) @db.Uuid
+  code        String   @unique @db.VarChar(100)
+  module      String   @db.VarChar(100)
+  name        String   @db.VarChar(100)
+  description String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  rolePermissions RolePermission[]
+
+  @@map("permissions")
+}
+
+model UserRole {
+  id        String        @id @default(uuid()) @db.Uuid
+  userId    String        @map("user_id") @db.Uuid
+  roleId    String        @map("role_id") @db.Uuid
+  scopeType RoleScopeType @map("scope_type")
+  scopeId   String        @map("scope_id") @db.Uuid
+  createdBy String?       @map("created_by") @db.Uuid
+  createdAt DateTime      @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, roleId, scopeType, scopeId])
+  @@index([userId])
+  @@index([scopeType, scopeId])
+  @@map("user_roles")
+}
+
+model RolePermission {
+  roleId       String   @map("role_id") @db.Uuid
+  permissionId String   @map("permission_id") @db.Uuid
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+model Category {
+  id             String         @id @default(uuid()) @db.Uuid
+  organizationId String         @map("organization_id") @db.Uuid
+  parentId       String?        @map("parent_id") @db.Uuid
+  name           String         @db.VarChar(100)
+  code           String         @db.VarChar(100)
+  contentTypes   String[]       @default([]) @map("content_types")
+  sortOrder      Int            @default(0) @map("sort_order")
+  status         CategoryStatus @default(ACTIVE)
+  deletedAt DateTime? @map("deleted_at")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  parent       Category?    @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  children     Category[]   @relation("CategoryHierarchy")
+  contents     Content[]
+
+  @@unique([organizationId, code])
+  @@index([organizationId])
+  @@index([parentId])
+  @@map("categories")
+}
+
+model Content {
+  id                 String             @id @default(uuid()) @db.Uuid
+  organizationId     String             @map("organization_id") @db.Uuid
+  contentType        ContentType        @map("content_type")
+  title              String             @db.VarChar(200)
+  slug               String             @unique @db.VarChar(200)
+  summary            String?
+  categoryId         String?            @map("category_id") @db.Uuid
+  ownerId            String             @map("owner_id") @db.Uuid
+  teamId             String             @map("team_id") @db.Uuid
+  currentVersionId   String?            @unique @map("current_version_id") @db.Uuid
+  draftVersionId     String?            @unique @map("draft_version_id") @db.Uuid
+  status             ContentStatus      @default(DRAFT)
+  visibility         ContentVisibility  @default(ORGANIZATION)
+  verificationStatus VerificationStatus @default(UNVERIFIED) @map("verification_status")
+  coverFileId        String?            @map("cover_file_id") @db.Uuid
+  publishedAt        DateTime?          @map("published_at")
+  lastReviewedAt     DateTime?          @map("last_reviewed_at")
+  reviewDueAt        DateTime?          @map("review_due_at")
+  createdById        String             @map("created_by") @db.Uuid
+  createdAt          DateTime           @default(now()) @map("created_at")
+  updatedAt          DateTime           @updatedAt @map("updated_at")
+  archivedAt         DateTime?          @map("archived_at")
+  deletedAt          DateTime?          @map("deleted_at")
+
+  organization      Organization      @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  category          Category?         @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  owner             User              @relation("ContentOwner", fields: [ownerId], references: [id], onDelete: Restrict)
+  team              Team              @relation(fields: [teamId], references: [id], onDelete: Restrict)
+  createdBy         User              @relation("ContentCreator", fields: [createdById], references: [id], onDelete: Restrict)
+  coverFile         FileAttachment?   @relation("ContentCover", fields: [coverFileId], references: [id], onDelete: SetNull)
+  versions          ContentVersion[]  @relation("ContentVersions")
+  currentVersion    ContentVersion?   @relation("CurrentContentVersion", fields: [currentVersionId], references: [id], onDelete: SetNull)
+  draftVersion      ContentVersion?   @relation("DraftContentVersion", fields: [draftVersionId], references: [id], onDelete: SetNull)
+  toolDetail        AIToolDetail?
+  assetDetail       AssetDetail?
+  skillDetail       SkillDetail?
+  caseDetail        CaseDetail?       @relation("CaseContent")
+  projectDetail     AIProjectDetail?
+  tags              ContentTag[]
+  sourceRelations   ContentRelation[] @relation("SourceContent")
+  targetRelations   ContentRelation[] @relation("TargetContent")
+  relatedAsSkill    CaseDetail[]      @relation("RelatedSkill")
+  relatedAsProject  CaseDetail[]      @relation("RelatedProject")
+  reviewRequests    ReviewRequest[]
+  favorites         Favorite[]
+  recentViews       RecentView[]
+  usageEvents       UsageEvent[]
+  clickedSearchLogs SearchLog[]
+
+  @@index([organizationId, contentType, status])
+  @@index([categoryId])
+  @@index([ownerId])
+  @@index([teamId])
+  @@index([publishedAt])
+  @@index([updatedAt])
+  @@index([reviewDueAt])
+  @@map("contents")
+}
+
+model ContentVersion {
+  id            String        @id @default(uuid()) @db.Uuid
+  contentId     String        @map("content_id") @db.Uuid
+  versionNumber Int           @map("version_number")
+  versionLabel  String?       @map("version_label") @db.VarChar(50)
+  versionStatus ContentStatus @default(DRAFT) @map("version_status")
+  baseVersionId String?       @map("base_version_id") @db.Uuid
+  title         String        @db.VarChar(200)
+  summary       String?
+  body          Json
+  changeSummary String?       @map("change_summary")
+  createdById   String        @map("created_by") @db.Uuid
+  createdAt     DateTime      @default(now()) @map("created_at")
+  submittedAt   DateTime?     @map("submitted_at")
+  publishedAt   DateTime?     @map("published_at")
+
+  content         Content          @relation("ContentVersions", fields: [contentId], references: [id], onDelete: Cascade)
+  createdBy       User             @relation(fields: [createdById], references: [id], onDelete: Restrict)
+  baseVersion     ContentVersion?  @relation("VersionHistory", fields: [baseVersionId], references: [id], onDelete: SetNull)
+  derivedVersions ContentVersion[] @relation("VersionHistory")
+  currentFor      Content?         @relation("CurrentContentVersion")
+  draftFor        Content?         @relation("DraftContentVersion")
+  reviewRequests  ReviewRequest[]
+
+  @@unique([contentId, versionNumber])
+  @@index([baseVersionId])
+  @@map("content_versions")
+}
+
+model ReviewRequest {
+  id                 String              @id @default(uuid()) @db.Uuid
+  contentId          String              @map("content_id") @db.Uuid
+  versionId          String              @map("version_id") @db.Uuid
+  submittedById      String              @map("submitted_by") @db.Uuid
+  assignedReviewerId String?             @map("assigned_reviewer_id") @db.Uuid
+  status             ReviewRequestStatus @default(PENDING)
+  submitMessage      String?             @map("submit_message")
+  dueAt              DateTime?           @map("due_at")
+  submittedAt        DateTime            @default(now()) @map("submitted_at")
+  completedAt        DateTime?           @map("completed_at")
+  createdAt          DateTime            @default(now()) @map("created_at")
+
+  content          Content        @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  version          ContentVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
+  submittedBy      User           @relation("SubmittedReviews", fields: [submittedById], references: [id], onDelete: Restrict)
+  assignedReviewer User?          @relation("AssignedReviews", fields: [assignedReviewerId], references: [id], onDelete: SetNull)
+  actions          ReviewAction[]
+
+  @@index([contentId, status])
+  @@index([versionId])
+  @@index([assignedReviewerId, status])
+  @@map("review_requests")
+}
+
+model ReviewAction {
+  id              String           @id @default(uuid()) @db.Uuid
+  reviewRequestId String           @map("review_request_id") @db.Uuid
+  actorId         String           @map("actor_id") @db.Uuid
+  action          ReviewActionType
+  comment         String?
+  metadata        Json?
+  createdAt       DateTime         @default(now()) @map("created_at")
+
+  reviewRequest ReviewRequest @relation(fields: [reviewRequestId], references: [id], onDelete: Cascade)
+  actor         User          @relation(fields: [actorId], references: [id], onDelete: Restrict)
+
+  @@index([reviewRequestId, createdAt])
+  @@index([actorId])
+  @@map("review_actions")
+}
+
+model Notification {
+  id                String              @id @default(uuid()) @db.Uuid
+  receiverId        String              @map("receiver_id") @db.Uuid
+  type              String              @db.VarChar(100)
+  title             String              @db.VarChar(200)
+  message           String
+  relatedEntityType String?             @map("related_entity_type") @db.VarChar(100)
+  relatedEntityId   String?             @map("related_entity_id") @db.Uuid
+  channel           NotificationChannel @default(IN_APP)
+  status            NotificationStatus  @default(SENT)
+  readAt            DateTime?           @map("read_at")
+  createdAt         DateTime            @default(now()) @map("created_at")
+  sentAt            DateTime?           @map("sent_at")
+
+  receiver User @relation(fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@index([receiverId, readAt, createdAt])
+  @@index([relatedEntityType, relatedEntityId])
+  @@map("notifications")
+}
+
+model AssetDetail {
+  contentId            String   @id @map("content_id") @db.Uuid
+  assetType            String   @map("asset_type") @db.VarChar(100)
+  platforms            String[] @default([])
+  scenarios            String[] @default([])
+  unsuitableScenarios  String[] @default([]) @map("unsuitable_scenarios")
+  problemStatement     String?  @map("problem_statement")
+  usageGuide           Json?    @map("usage_guide")
+  resourceLinks        Json?    @map("resource_links")
+  maintenanceCycleDays Int?     @map("maintenance_cycle_days")
+  extraData            Json?    @map("extra_data")
+
+  content Content @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  @@map("asset_details")
+}
+
+model SkillDetail {
+  contentId         String            @id @map("content_id") @db.Uuid
+  applicableRoles   String[]          @default([]) @map("applicable_roles")
+  inputRequirements Json?             @map("input_requirements")
+  outputSchema      Json?             @map("output_schema")
+  promptTemplate    String?           @map("prompt_template")
+  executionSteps    Json?             @map("execution_steps")
+  exampleInput      Json?             @map("example_input")
+  exampleOutput     Json?             @map("example_output")
+  humanReviewRules  Json?             @map("human_review_rules")
+  limitations       String?
+  recommendedModels String[]          @default([]) @map("recommended_models")
+  dataSecurityLevel DataSecurityLevel @default(INTERNAL) @map("data_security_level")
+  promptVersion     String?           @map("prompt_version") @db.VarChar(50)
+  onlineExecutable  Boolean           @default(false) @map("online_executable")
+  executionConfig   Json?             @map("execution_config")
+
+  content Content @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  @@map("skill_details")
+}
+
+model CaseDetail {
+  contentId               String   @id @map("content_id") @db.Uuid
+  background              String?
+  originalProcess         String?  @map("original_process")
+  aiResponsibilities      String?  @map("ai_responsibilities")
+  humanResponsibilities   String?  @map("human_responsibilities")
+  resultSummary           String?  @map("result_summary")
+  metricName              String?  @map("metric_name") @db.VarChar(100)
+  beforeValue             Decimal? @map("before_value") @db.Decimal(18, 4)
+  afterValue              Decimal? @map("after_value") @db.Decimal(18, 4)
+  sampleSize              Int?     @map("sample_size")
+  validationMethod        String?  @map("validation_method")
+  limitations             String?
+  relatedSkillContentId   String?  @map("related_skill_content_id") @db.Uuid
+  relatedProjectContentId String?  @map("related_project_content_id") @db.Uuid
+
+  content        Content        @relation("CaseContent", fields: [contentId], references: [id], onDelete: Cascade)
+  relatedSkill   Content?       @relation("RelatedSkill", fields: [relatedSkillContentId], references: [id], onDelete: SetNull)
+  relatedProject Content?       @relation("RelatedProject", fields: [relatedProjectContentId], references: [id], onDelete: SetNull)
+  evidence       CaseEvidence[]
+
+  @@index([relatedSkillContentId])
+  @@index([relatedProjectContentId])
+  @@map("case_details")
+}
+
+model CaseEvidence {
+  id                 String                     @id @default(uuid()) @db.Uuid
+  caseContentId      String                     @map("case_content_id") @db.Uuid
+  evidenceType       EvidenceType               @map("evidence_type")
+  metricName         String?                    @map("metric_name") @db.VarChar(100)
+  metricValue        Decimal?                   @map("metric_value") @db.Decimal(18, 4)
+  dataSource         String?                    @map("data_source")
+  periodStart        DateTime?                  @map("period_start") @db.Date
+  periodEnd          DateTime?                  @map("period_end") @db.Date
+  sampleSize         Int?                       @map("sample_size")
+  verificationStatus EvidenceVerificationStatus @default(PENDING) @map("verification_status")
+  verifiedById       String?                    @map("verified_by") @db.Uuid
+  verifiedAt         DateTime?                  @map("verified_at")
+  attachmentId       String?                    @map("attachment_id") @db.Uuid
+
+  caseDetail CaseDetail      @relation(fields: [caseContentId], references: [contentId], onDelete: Cascade)
+  verifiedBy User?           @relation(fields: [verifiedById], references: [id], onDelete: SetNull)
+  attachment FileAttachment? @relation(fields: [attachmentId], references: [id], onDelete: SetNull)
+
+  @@index([caseContentId])
+  @@index([verifiedById])
+  @@index([attachmentId])
+  @@map("case_evidence")
+}
+
+model AIProjectDetail {
+  contentId            String         @id @map("content_id") @db.Uuid
+  projectCode          String         @unique @map("project_code") @db.VarChar(100)
+  domain               String?        @db.VarChar(100)
+  targetValue          String?        @map("target_value")
+  projectStage         AIProjectStage @default(EXPLORING) @map("project_stage")
+  priority             Priority       @default(MEDIUM)
+  suggestedOwnerTeamId String?        @map("suggested_owner_team_id") @db.Uuid
+  problemStatement     String?        @map("problem_statement")
+  solutionHypothesis   String?        @map("solution_hypothesis")
+  expectedOutcome      String?        @map("expected_outcome")
+  riskLevel            String?        @map("risk_level") @db.VarChar(50)
+  evaluationResult     Json?          @map("evaluation_result")
+  convertedProjectRef  String?        @map("converted_project_ref")
+
+  content            Content @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  suggestedOwnerTeam Team?   @relation(fields: [suggestedOwnerTeamId], references: [id], onDelete: SetNull)
+
+  @@index([suggestedOwnerTeamId])
+  @@map("ai_project_details")
+}
+
+model Tag {
+  contentTypes String[] @default([]) @map("content_types")
+  id             String    @id @default(uuid()) @db.Uuid
+  organizationId String    @map("organization_id") @db.Uuid
+  name           String    @db.VarChar(100)
+  normalizedName String    @map("normalized_name") @db.VarChar(100)
+  usageCount     Int       @default(0) @map("usage_count")
+  status         TagStatus @default(DISABLED)
+  mergedToId     String?   @map("merged_to_id") @db.Uuid
+  deletedAt DateTime? @map("deleted_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  mergedTo     Tag?         @relation("TagMerge", fields: [mergedToId], references: [id], onDelete: SetNull)
+  mergedFrom   Tag[]        @relation("TagMerge")
+  contents     ContentTag[]
+
+  @@unique([organizationId, normalizedName])
+  @@index([mergedToId])
+  @@map("tags")
+}
+
+model ContentTag {
+  contentId   String   @map("content_id") @db.Uuid
+  tagId       String   @map("tag_id") @db.Uuid
+  createdById String   @map("created_by") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  content   Content @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Restrict)
+  createdBy User    @relation(fields: [createdById], references: [id], onDelete: Restrict)
+
+  @@id([contentId, tagId])
+  @@index([tagId])
+  @@map("content_tags")
+}
+
+model FileAttachment {
+  id             String          @id @default(uuid()) @db.Uuid
+  organizationId String          @map("organization_id") @db.Uuid
+  originalName   String          @map("original_name") @db.VarChar(255)
+  storageKey     String          @unique @map("storage_key") @db.VarChar(500)
+  mimeType       String          @map("mime_type") @db.VarChar(150)
+  extension      String?         @db.VarChar(30)
+  sizeBytes      BigInt          @map("size_bytes")
+  checksum       String          @db.VarChar(128)
+  accessLevel    FileAccessLevel @default(INTERNAL) @map("access_level")
+  uploadStatus   UploadStatus    @default(UPLOADING) @map("upload_status")
+  uploadedById   String          @map("uploaded_by") @db.Uuid
+  createdAt      DateTime        @default(now()) @map("created_at")
+  deletedAt      DateTime?       @map("deleted_at")
+
+  organization  Organization         @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  uploadedBy    User                 @relation(fields: [uploadedById], references: [id], onDelete: Restrict)
+  coverContents Content[]            @relation("ContentCover")
+  relations     AttachmentRelation[]
+  caseEvidence  CaseEvidence[]
+
+  @@index([organizationId, uploadStatus])
+  @@index([uploadedById])
+  @@map("file_attachments")
+}
+
+model AttachmentRelation {
+  id         String               @id @default(uuid()) @db.Uuid
+  fileId     String               @map("file_id") @db.Uuid
+  entityType AttachmentEntityType @map("entity_type")
+  entityId   String               @map("entity_id") @db.Uuid
+  usageType  AttachmentUsageType  @map("usage_type")
+  sortOrder  Int                  @default(0) @map("sort_order")
+  createdAt  DateTime             @default(now()) @map("created_at")
+
+  file FileAttachment @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  @@index([entityType, entityId])
+  @@index([fileId])
+  @@map("attachment_relations")
+}
+
+model ContentRelation {
+  id              String              @id @default(uuid()) @db.Uuid
+  sourceContentId String              @map("source_content_id") @db.Uuid
+  targetContentId String              @map("target_content_id") @db.Uuid
+  relationType    ContentRelationType @map("relation_type")
+  createdById     String              @map("created_by") @db.Uuid
+  createdAt       DateTime            @default(now()) @map("created_at")
+
+  sourceContent Content @relation("SourceContent", fields: [sourceContentId], references: [id], onDelete: Cascade)
+  targetContent Content @relation("TargetContent", fields: [targetContentId], references: [id], onDelete: Cascade)
+  createdBy     User    @relation(fields: [createdById], references: [id], onDelete: Restrict)
+
+  @@unique([sourceContentId, targetContentId, relationType])
+  @@index([targetContentId])
+  @@map("content_relations")
+}
+
+model Favorite {
+  userId    String   @map("user_id") @db.Uuid
+  contentId String   @map("content_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content Content @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  @@id([userId, contentId])
+  @@index([contentId])
+  @@map("favorites")
+}
+
+model RecentView {
+  userId        String   @map("user_id") @db.Uuid
+  contentId     String   @map("content_id") @db.Uuid
+  viewCount     Int      @default(1) @map("view_count")
+  firstViewedAt DateTime @default(now()) @map("first_viewed_at")
+  lastViewedAt  DateTime @default(now()) @map("last_viewed_at")
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content Content @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  @@id([userId, contentId])
+  @@index([userId, lastViewedAt])
+  @@map("recent_views")
+}
+
+model UsageEvent {
+  id               String   @id @default(uuid()) @db.Uuid
+  organizationId   String   @map("organization_id") @db.Uuid
+  userId           String?  @map("user_id") @db.Uuid
+  sessionId        String?  @map("session_id") @db.VarChar(100)
+  contentId        String?  @map("content_id") @db.Uuid
+  eventType        String   @map("event_type") @db.VarChar(100)
+  projectReference String?  @map("project_reference") @db.VarChar(500)
+  sourcePage       String?  @map("source_page") @db.VarChar(500)
+  metadata         Json?
+  occurredAt       DateTime @default(now()) @map("occurred_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  user         User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  content      Content?     @relation(fields: [contentId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, occurredAt])
+  @@index([contentId, eventType, occurredAt])
+  @@index([userId, occurredAt])
+  @@map("usage_events")
+}
+
+model SearchLog {
+  id                String   @id @default(uuid()) @db.Uuid
+  organizationId    String   @map("organization_id") @db.Uuid
+  userId            String?  @map("user_id") @db.Uuid
+  keyword           String   @db.VarChar(200)
+  normalizedKeyword String   @map("normalized_keyword") @db.VarChar(200)
+  filters           Json?
+  resultCount       Int      @map("result_count")
+  clickedContentId  String?  @map("clicked_content_id") @db.Uuid
+  sessionId         String?  @map("session_id") @db.VarChar(100)
+  searchedAt        DateTime @default(now()) @map("searched_at")
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  user           User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  clickedContent Content?     @relation(fields: [clickedContentId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, searchedAt])
+  @@index([normalizedKeyword])
+  @@map("search_logs")
+}
+
+model AuditLog {
+  id             String   @id @default(uuid()) @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  actorId        String?  @map("actor_id") @db.Uuid
+  action         String   @db.VarChar(100)
+  entityType     String   @map("entity_type") @db.VarChar(100)
+  entityId       String   @map("entity_id") @db.Uuid
+  beforeData     Json?    @map("before_data")
+  afterData      Json?    @map("after_data")
+  ipAddress      String?  @map("ip_address") @db.VarChar(100)
+  userAgent      String?  @map("user_agent") @db.VarChar(500)
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  actor        User?        @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, createdAt])
+  @@index([entityType, entityId])
+  @@index([actorId])
+  @@map("audit_logs")
+}
+
+model AIToolDetail {
+  contentId String @id @map("content_id") @db.Uuid
+  websiteUrl String @map("website_url")
+  vendor String
+  platforms String[]
+  scenarios String[]
+  usageGuide String @map("usage_guide")
+  limitations String
+  pricingModel String @map("pricing_model")
+  content Content @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  @@map("ai_tool_details")
+}

@@ -1,0 +1,190 @@
+/* Important declarations in this layer take precedence over legacy page overrides.
+   Keep state priority: base < hover < pressed/selected < focus < invalid < disabled. */
+@layer component-states {
+  :root {
+    --control-hover: color-mix(in srgb, var(--background), var(--foreground) 7%);
+    --control-pressed: color-mix(in srgb, var(--background), var(--foreground) 12%);
+    --control-line-hover: color-mix(in srgb, var(--foreground) 35%, transparent);
+    --control-focus: var(--ring);
+  }
+  html:not(.dark) .workspace-shell .workspace-filter-bar {
+    --v9-field: #fff;
+  }
+  :is([data-slot='input'], [data-slot='textarea'], [data-slot='select-trigger']) {
+    border-radius: 12px !important;
+    border-color: var(--input) !important;
+    background-color: var(--v9-field) !important;
+    color: var(--foreground) !important;
+    transition: border-color .15s, background-color .15s, box-shadow .15s;
+  }
+  :is([data-slot='input'], [data-slot='textarea'])::placeholder { color: var(--muted-foreground) !important; }
+  @media (hover: hover) {
+    :is([data-slot='input'], [data-slot='textarea'], [data-slot='select-trigger']):not(:disabled):not([readonly]):hover {
+      border-color: var(--control-line-hover) !important;
+    }
+    :is(button, a)[data-variant]:not(:disabled):not([aria-disabled='true']):hover {
+      background-color: var(--control-hover) !important;
+      color: var(--foreground) !important;
+      border-color: var(--control-line-hover) !important;
+    }
+    :is(button, a)[data-variant='default']:not(:disabled):not([aria-disabled='true']):hover {
+      background-color: color-mix(in srgb, var(--primary) 88%, var(--background)) !important;
+      color: var(--primary-foreground) !important;
+    }
+    :is(button, a)[data-variant='destructive']:not(:disabled):hover {
+      background-color: color-mix(in srgb, var(--destructive) 18%, var(--background)) !important;
+      color: var(--destructive) !important;
+      border-color: var(--destructive) !important;
+    }
+    :is(button, a)[data-variant='link']:hover { background-color: transparent !important; text-decoration: underline; }
+  }
+  :is(button, a)[data-variant]:not(:disabled):not([aria-disabled='true']):active {
+    background-color: var(--control-pressed) !important;
+    color: var(--foreground) !important;
+  }
+  :is(button, a)[data-variant='default']:not(:disabled):active {
+    background-color: color-mix(in srgb, var(--primary) 78%, var(--background)) !important;
+    color: var(--primary-foreground) !important;
+  }
+  :is([data-slot='select-item'], [data-slot='dropdown-menu-item']):is([data-highlighted], :focus),
+  [data-slot='select-trigger'][data-state='open'] {
+    background-color: var(--control-hover) !important;
+    color: var(--foreground) !important;
+  }
+  :is([data-slot='tabs-trigger'][data-state='active'], [data-variant][aria-pressed='true']) {
+    background-color: var(--primary) !important;
+    color: var(--primary-foreground) !important;
+    border-color: var(--primary) !important;
+  }
+  .workspace-shell button.favorite-control[aria-pressed='true'] {
+    background-color: var(--secondary) !important;
+    color: var(--text-secondary) !important;
+    border-color: var(--border) !important;
+  }
+  .workspace-shell button.favorite-control[aria-pressed='true']:hover:not(:disabled),
+  .workspace-shell button.favorite-control[aria-pressed='true']:focus-visible {
+    background-color: var(--muted) !important;
+    color: var(--foreground) !important;
+    border-color: var(--input) !important;
+  }
+  .workspace-shell button.favorite-control[aria-pressed='true'] svg {
+    color: #111 !important;
+    fill: #111 !important;
+    stroke: #111 !important;
+  }
+  :is([data-slot='input'], [data-slot='textarea'], [data-slot='select-trigger'], [data-variant], [data-slot='tabs-trigger'], [data-card-link]):focus-visible {
+    outline: 2px solid var(--control-focus) !important;
+    outline-offset: 2px !important;
+    box-shadow: none !important;
+  }
+  :is([data-slot='input'], [data-slot='textarea'], [data-slot='select-trigger']):is([aria-invalid='true'], :user-invalid) {
+    border-color: var(--destructive) !important;
+    outline-color: var(--destructive) !important;
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--destructive) 15%, transparent) !important;
+  }
+  :is([data-slot='input'], [data-slot='textarea'])[readonly] {
+    background-color: var(--muted) !important;
+  }
+  :is([data-slot='input'], [data-slot='textarea'], [data-slot='select-trigger'], [data-variant], [data-slot='tabs-trigger']):is(:disabled, [aria-disabled='true'], [data-disabled]) {
+    background-color: var(--muted) !important;
+    color: var(--disabled-foreground, var(--muted-foreground)) !important;
+    border-color: var(--border) !important;
+    box-shadow: none !important;
+    opacity: .6 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+    translate: none !important;
+  }
+  [data-slot='select-item'][data-disabled] { opacity: .5 !important; pointer-events: none; }
+  @media (prefers-reduced-motion: reduce) {
+    :is([data-slot='input'], [data-slot='textarea'], [data-slot='select-trigger'], [data-variant]) { transition: none !important; }
+  }
+}
+
+@layer component-states {
+  :is(button, a, input, textarea, select, [role='checkbox'], [role='switch']):focus-visible {
+    outline: 2px solid var(--control-focus) !important;
+    outline-offset: 2px !important;
+  }
+  :is(input[type='checkbox'], input[type='radio']) { accent-color: var(--primary); }
+  :is(input[type='checkbox'], input[type='radio']):disabled { opacity: .5; cursor: not-allowed; }
+  :is(input[type='checkbox'], input[type='radio'])[aria-invalid='true'] { outline: 2px solid var(--destructive); outline-offset: 2px; }
+  @media (hover: hover) {
+    [data-slot='tabs-trigger']:not(:disabled):not([data-state='active']):hover {
+      background-color: var(--control-hover) !important;
+      color: var(--foreground) !important;
+    }
+  }
+  [data-variant='destructive']:not(:disabled):active {
+    background-color: color-mix(in srgb, var(--destructive) 26%, var(--background)) !important;
+    color: var(--destructive) !important;
+  }
+}
+
+@layer component-states {
+  .workspace-shell .detail-toolbar :is(button[data-variant],a[data-variant],.management-menu > summary):not(.management-menu > div *) {
+    height: 36px !important; min-height: 36px !important; border-width: 1px !important; border-style: solid !important;
+    border-radius: 12px !important; font-size: 12px !important; gap: 6px;
+  }
+  .workspace-shell .detail-toolbar :is([data-variant='outline'],.management-menu > summary):not(.management-menu > div *):not([aria-pressed='true']) {
+    background-color: var(--v9-soft) !important; color: var(--v9-text) !important; border-color: var(--v9-line) !important;
+  }
+  .workspace-shell .detail-toolbar :is([data-variant='outline'],.management-menu > summary):not(.management-menu > div *):not(:disabled):not([aria-pressed='true']):is(:hover,:focus-visible) {
+    background-color: var(--control-hover) !important; color: var(--v9-text) !important; border-color: var(--control-line-hover) !important;
+  }
+  .workspace-shell .detail-toolbar :is(button[data-variant],a[data-variant]):not(.management-menu > div *) { padding-inline: 12px; }
+  .workspace-shell .detail-toolbar .management-menu > summary { width: 36px; padding: 0; display: grid; place-items: center; }
+  .workspace-shell .detail-toolbar :is(button,a) > svg { width: 16px; height: 16px; }
+}
+
+@layer component-states {
+  /* Semantic actions override neutral hover/pressed rules in this same layer. */
+  html body .workspace-shell :is(button,a)[data-tone='warning'][data-variant]:not(:disabled):not([aria-disabled='true']):is(:hover,:focus-visible,:active) {
+    background-color: color-mix(in srgb,var(--v9-status-warning-text) 14%,var(--v9-panel)) !important;
+    color: var(--v9-status-warning-text) !important;
+    border-color: var(--v9-status-warning-line) !important;
+  }
+  html body .workspace-shell :is(button,a)[data-variant='destructive']:not(:disabled):not([aria-disabled='true']):is(:hover,:focus-visible,:active) {
+    background-color: color-mix(in srgb,var(--v9-status-danger-text) 14%,var(--v9-panel)) !important;
+    color: var(--v9-status-danger-text) !important;
+    border-color: var(--v9-status-danger-line) !important;
+  }
+  html body .workspace-shell :is(button,a)[data-tone='warning'][data-variant]:not(:disabled):active {
+    background-color: color-mix(in srgb,var(--v9-status-warning-text) 22%,var(--v9-panel)) !important;
+  }
+  html body .workspace-shell :is(button,a)[data-variant='destructive']:not(:disabled):active {
+    background-color: color-mix(in srgb,var(--v9-status-danger-text) 22%,var(--v9-panel)) !important;
+  }
+}
+
+@layer component-states {
+  .workspace-shell .composer-actions button[data-variant] {
+    height: 40px !important;
+    border: 1px solid var(--v9-line) !important;
+  }
+  .workspace-shell .composer-actions button[data-variant='outline'] {
+    background-color: var(--v9-soft) !important;
+    color: var(--v9-text) !important;
+  }
+  .workspace-shell .composer-actions button[data-variant='destructive'] {
+    border-color: var(--v9-status-danger-line) !important;
+  }
+}
+
+@layer component-states {
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .workspace-shell .suggested-project-card:hover {
+      transform: translateY(-3px) !important;
+      translate: none !important;
+    }
+  }
+}
+
+@layer component-states {
+  .home-header-actions > :is(a, button) {
+    height: 40px !important;
+    min-height: 40px !important;
+    box-sizing: border-box;
+    align-items: center;
+  }
+}

@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="refresh" content="0; url=index.html#assets" />
+    <title>上传资产 | 设计智能资产平台</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="icon" type="image/png" href="assets/favicon-20260710.png" />
+    <meta name="theme-color" content="#020202" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400;500;600&display=swap" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400;500;600&display=swap" rel="stylesheet" media="print" onload="this.onload=null;this.media='all'" />
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@200;300;400;500;600&display=swap" rel="stylesheet" /></noscript>
+    <style>
+      :root {
+        --bg: #020202;
+        --panel: rgba(255, 255, 255, 0.05);
+        --panel-strong: rgba(255, 255, 255, 0.07);
+        --line: rgba(255, 255, 255, 0.1);
+        --line-soft: rgba(255, 255, 255, 0.06);
+        --text: #f7f7f5;
+        --muted: rgba(255, 255, 255, 0.68);
+        --muted-soft: rgba(255, 255, 255, 0.46);
+        --radius-xl: 32px;
+        --radius-lg: 24px;
+        --radius-md: 18px;
+        --shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+        --max: 1180px;
+        --accent: #ffffff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        background: #020202;
+      }
+
+      body {
+        margin: 0;
+        color: var(--text);
+        font-family: var(--font-body);
+        font-weight: var(--weight-body);
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        background:
+          radial-gradient(circle at 82% 8%, rgba(131, 124, 255, 0.08), transparent 24%),
+          radial-gradient(circle at 10% 0%, rgba(135, 208, 255, 0.06), transparent 22%),
+          linear-gradient(180deg, #010101 0%, #040404 46%, #020202 100%);
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+
+      .page {
+        padding: 24px 0 96px;
+      }
+
+      .container {
+        width: min(var(--max), calc(100vw - 32px));
+        margin: 0 auto;
+      }
+
+      .glass {
+        border: 1px solid var(--line);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03));
+        box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+      }
+
+      .topbar {
+        min-height: 80px;
+        padding: 0 16px 0 18px;
+        border-radius: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.11), rgba(128, 128, 128, 0.08));
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow:
+          0 18px 60px rgba(0, 0, 0, 0.28),
+          inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(22px);
+        -webkit-backdrop-filter: blur(22px);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 15px;
+        font-weight: var(--weight-ui);
+        letter-spacing: 0;
+        flex-shrink: 0;
+      }
+
+      .brand-mark {
+        width: 38px;
+        height: 38px;
+        border-radius: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        background: transparent;
+        border: 0;
+      }
+
+      .brand-mark img {
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: contain;
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+        margin-left: auto;
+        margin-right: 32px;
+        color: rgba(255, 255, 255, 0.92);
+        font-size: 15px;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+      }
+
+      .nav a {
+        opacity: 1;
+        position: relative;
+        transition: color 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+      }
+
+      .nav a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -8px;
+        width: 100%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent);
+        opacity: 0;
+        transform: scaleX(0.72);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+      }
+
+      .nav a:hover,
+      .nav a.active {
+        color: rgba(255, 255, 255, 1);
+        transform: translateY(-1px);
+      }
+
+      .nav a:hover::after,
+      .nav a.active::after {
+        opacity: 1;
+        transform: scaleX(1);
+      }
+
+      .chip,
+      .tag,
+      .tab,
+      .search {
+        border-radius: 999px;
+      }
+
+      .button,
+      .button-secondary,
+      .ghost-button,
+      .copy-button {
+        min-height: 56px;
+        padding: 0 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        font-size: 15px;
+        font-weight: var(--weight-title-strong);
+        letter-spacing: 0.01em;
+        transition: all 0.32s ease;
+      }
+
+      .button:hover,
+      .button-secondary:hover,
+      .ghost-button:hover,
+      .copy-button:hover {
+        transform: translateY(-2px);
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      .button {
+        color: #0b0b0b;
+        background: linear-gradient(180deg, #ffffff 0%, #ebebeb 100%);
+        border-radius: 14px;
+        padding: 0 32px;
+        box-shadow: 0 10px 30px rgba(255, 255, 255, 0.12);
+      }
+
+      .button-secondary,
+      .ghost-button,
+      .copy-button {
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 12px;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.08), rgba(140, 140, 140, 0.06));
+        box-shadow:
+          0 14px 34px rgba(0, 0, 0, 0.2),
+          inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+      }
+      .hero,
+      .summary,
+      .form-shell {
+        margin-top: 24px;
+        border-radius: var(--radius-xl);
+      }
+
+      .hero {
+        padding: 34px 36px 38px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at 88% 18%, rgba(118, 119, 255, 0.14), transparent 23%),
+          linear-gradient(135deg, rgba(255, 255, 255, 0.025), transparent 48%);
+        pointer-events: none;
+      }
+
+      .summary {
+        padding: 24px 26px;
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 18px;
+        align-items: center;
+      }
+
+      .eyebrow,
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        min-height: 36px;
+        padding: 0 14px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: var(--weight-ui);
+        letter-spacing: 0.05em;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      h1 {
+        margin-top: 18px;
+        max-width: 840px;
+        font-size: clamp(46px, 7vw, 78px);
+        line-height: 0.97;
+        letter-spacing: -0.07em;
+        font-weight: var(--weight-title-strong);
+      }
+
+      .hero-copy,
+      .summary-copy,
+      .field-help,
+      .step-copy {
+        color: var(--muted);
+        line-height: 1.76;
+      }
+
+      .hero-copy {
+        margin-top: 18px;
+        max-width: 780px;
+        font-size: 18px;
+      }
+
+      .hero-actions,
+      .hero-meta,
+      .summary-tags,
+      .steps,
+      .form-actions {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .hero-actions,
+      .hero-meta,
+      .summary-tags {
+        margin-top: 24px;
+      }
+
+      .hero-meta {
+        color: var(--muted-soft);
+        font-size: 13px;
+      }
+
+      .summary-title {
+        font-size: 28px;
+        line-height: 1.04;
+        letter-spacing: -0.05em;
+        font-weight: var(--weight-title);
+      }
+
+      .steps {
+        justify-content: flex-end;
+      }
+
+      .step {
+        min-width: 170px;
+        padding: 18px;
+        border-radius: 22px;
+        border: 1px solid var(--line-soft);
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      .step-index {
+        color: var(--muted-soft);
+        font-size: 12px;
+        font-weight: var(--weight-ui);
+        letter-spacing: 0.08em;
+      }
+
+      .step-title {
+        margin-top: 10px;
+        font-size: 18px;
+        line-height: 1.1;
+        letter-spacing: -0.04em;
+        font-weight: var(--weight-title);
+      }
+
+      .step-copy {
+        margin-top: 8px;
+        font-size: 13px;
+      }
+
+      .form-shell {
+        padding: 28px;
+      }
+
+      .form-head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .form-head h2 {
+        font-size: 34px;
+        line-height: 1.02;
+        letter-spacing: -0.06em;
+        font-weight: var(--weight-title);
+      }
+
+      .form-head p {
+        margin-top: 10px;
+        max-width: 700px;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.74;
+      }
+
+      .form-grid {
+        margin-top: 24px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .field {
+        padding: 18px;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--line-soft);
+        background: rgba(255, 255, 255, 0.035);
+      }
+
+      .field.full {
+        grid-column: 1 / -1;
+      }
+
+      .label {
+        display: block;
+        margin-bottom: 12px;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 14px;
+        font-weight: var(--weight-ui);
+      }
+
+      .control,
+      .textarea,
+      .upload-box {
+        width: 100%;
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(0, 0, 0, 0.18);
+        color: #fff;
+        outline: none;
+        transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+      }
+
+      .control:focus,
+      .textarea:focus,
+      .upload-box:hover {
+        border-color: rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.05);
+        box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.04);
+      }
+
+      .control:disabled,
+      .textarea:disabled,
+      .tag-row .tag:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+
+      .control {
+        min-height: 56px;
+        padding: 0 16px;
+      }
+
+      .textarea {
+        min-height: 144px;
+        padding: 16px;
+        resize: vertical;
+      }
+
+      .upload-box {
+        min-height: 180px;
+        padding: 22px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        cursor: pointer;
+      }
+
+      .upload-box strong {
+        font-size: 18px;
+        letter-spacing: -0.03em;
+        font-weight: var(--weight-title);
+      }
+
+      .upload-box span {
+        margin-top: 8px;
+        max-width: 420px;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.72;
+      }
+
+      .field-help {
+        margin-top: 12px;
+        font-size: 13px;
+      }
+
+      .tag-row {
+        margin-top: 14px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .tag {
+        cursor: pointer;
+        transition: background 180ms ease, border-color 180ms ease, color 180ms ease;
+      }
+
+      .tag.active {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.14);
+        border-color: rgba(255, 255, 255, 0.18);
+      }
+
+      .form-actions {
+        justify-content: space-between;
+        margin-top: 24px;
+      }
+
+      .form-note {
+        color: var(--muted-soft);
+        font-size: 13px;
+      }
+
+      @media (max-width: 960px) {
+        .nav {
+          display: none;
+        }
+
+        .summary,
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .steps {
+          justify-content: flex-start;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .page {
+          padding-top: 16px;
+        }
+
+        .topbar,
+        .hero,
+        .summary,
+        .form-shell {
+          padding: 20px;
+        }
+
+        h1 {
+          font-size: 42px;
+          font-weight: var(--weight-title-strong);
+        }
+
+        .form-head,
+        .form-actions {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+      }
+
+      /* 登录/注册弹窗专用样式，与主表单大卡片风格区分开 */
+      .auth-modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.68);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        padding: 24px;
+      }
+
+      .auth-modal-overlay[hidden] {
+        display: none;
+      }
+
+      .auth-modal {
+        position: relative;
+        width: 100%;
+        max-width: 400px;
+        background: #0c0c0f;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 20px;
+        padding: 28px;
+      }
+
+      .auth-modal-close {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(255, 255, 255, 0.04);
+        color: rgba(255, 255, 255, 0.7);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 16px;
+        line-height: 1;
+        transition: background 0.2s ease, color 0.2s ease;
+      }
+
+      .auth-modal-close:hover {
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+      }
+
+      .auth-modal h3 {
+        margin: 0 28px 20px 0;
+        font-size: 19px;
+        font-weight: var(--weight-title-strong);
+      }
+
+      .auth-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 22px;
+      }
+
+      .auth-tab {
+        flex: 1;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: transparent;
+        color: rgba(255, 255, 255, 0.55);
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+      }
+
+      .auth-tab.active {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border-color: rgba(255, 255, 255, 0.26);
+      }
+
+      .auth-field {
+        margin-bottom: 16px;
+      }
+
+      .auth-field label {
+        display: block;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 8px;
+      }
+
+      .auth-field input {
+        width: 100%;
+        box-sizing: border-box;
+        min-height: 44px;
+        padding: 0 14px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(255, 255, 255, 0.04);
+        color: #fff;
+        font-size: 14px;
+        outline: none;
+        transition: border-color 0.2s ease, background 0.2s ease;
+      }
+
+      .auth-field input:focus {
+        border-color: rgba(255, 255, 255, 0.4);
+        background: rgba(255, 255, 255, 0.06);
+      }
+
+      .auth-password-wrap {
+        position: relative;
+      }
+
+      .auth-password-wrap input {
+        padding-right: 44px;
+      }
+
+      .auth-password-toggle {
+        position: absolute;
+        top: 50%;
+        right: 6px;
+        transform: translateY(-50%);
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        border: none;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        transition: color 0.2s ease, background 0.2s ease;
+      }
+
+      .auth-password-toggle:hover {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .auth-error {
+        color: #ff8080;
+        font-size: 13px;
+        margin: -6px 0 16px;
+      }
+
+      .auth-modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 22px;
+      }
+
+      .auth-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: var(--weight-title-strong);
+        color: #fff;
+        text-transform: uppercase;
+        flex-shrink: 0;
+      }
+
+      .nav-auth-status {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.75);
+        white-space: nowrap;
+      }
+
+      .auth-user-trigger {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 4px 10px 4px 4px;
+        border-radius: 999px;
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
+
+      .auth-user-trigger:hover {
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .auth-dropdown {
+        position: absolute;
+        top: calc(100% + 10px);
+        right: 0;
+        min-width: 150px;
+        background: #0c0c0f;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 14px;
+        padding: 6px;
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+        z-index: 50;
+      }
+
+      .auth-dropdown[hidden] {
+        display: none;
+      }
+
+      .auth-dropdown-item {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 9px;
+        border: none;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 14px;
+        cursor: pointer;
+        text-align: left;
+        transition: background 0.2s ease, color 0.2s ease;
+      }
+
+      .auth-dropdown-item:hover {
+        background: rgba(255, 92, 92, 0.12);
+        color: #ff8080;
+      }
+
+      .auth-dropdown-icon {
+        font-size: 15px;
+        flex-shrink: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <div class="container">
+        <header class="topbar glass">
+          <a class="brand" href="index.html">
+            <span class="brand-mark"><img src="assets/nav-logo-20260710.png" alt="PalmPay UX Design logo" width="108" height="108" /></span>
+            <span>PalmPay UX Design</span>
+          </a>
+          <nav class="nav">
+            <a href="index.html">返回首页</a>
+            <a href="design-assets.html">设计资产</a>
+            <a href="ai-skill-toolkit.html">AI SKILL</a>
+            <a class="active" href="upload-asset.html">上传资产</a>
+          </nav>
+          <div class="auth-bar" id="authBar" style="display:flex;align-items:center;gap:12px;">
+            <a class="button-secondary" href="design-assets.html">浏览资产库</a>
+            <div class="auth-user-trigger" id="authUserTrigger" hidden>
+              <span class="auth-avatar" id="authAvatar"></span>
+              <span class="nav-auth-status" id="authStatus"></span>
+              <div class="auth-dropdown" id="authDropdown" hidden>
+                <button type="button" class="auth-dropdown-item" id="authLogoutBtn">
+                  <span class="auth-dropdown-icon">⏻</span>
+                  <span>退出登录</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <section class="hero glass">
+          <div class="eyebrow">Upload Asset</div>
+          <h1>把设计资产沉淀为可复用、可评选、可被业务看见的能力</h1>
+          <p class="hero-copy">把组件、模板、Prompt 和方法沉淀成团队可复用的资产。提交前需要先登录账号，方便记录每份资产的创建者，也让你之后能对自己提交的内容进行编辑或撤回。</p>
+          <div class="hero-actions">
+            <a class="button" href="#asset-form">开始上传</a>
+            <a class="button-secondary" href="design-assets.html">查看现有资产</a>
+          </div>
+          <div class="hero-meta">
+            <span>登录后可提交</span>
+            <span>仅本人可编辑/撤回</span>
+            <span>提交后进入审核状态</span>
+          </div>
+        </section>
+
+        <section class="summary glass">
+          <div>
+            <h2 class="summary-title">当前上传链路已经具备产品化雏形</h2>
+            <p class="summary-copy" style="margin-top: 12px;">
+              这一版重点不是堆功能，而是先把信息结构、表单秩序和操作反馈做精致。后续可以再逐步接入版本记录、审核状态、封面自动抽取和团队协作。
+            </p>
+            <div class="summary-tags">
+              <span class="tag active">草稿保存</span>
+              <span class="tag active">提交审核</span>
+              <span class="tag">版本说明</span>
+              <span class="tag">封面上传</span>
+            </div>
+          </div>
+          <div class="steps">
+            <div class="step">
+              <div class="step-index">STEP 01</div>
+              <div class="step-title">补充基础信息</div>
+              <div class="step-copy">名称、类型、团队归属和应用场景。</div>
+            </div>
+            <div class="step">
+              <div class="step-index">STEP 02</div>
+              <div class="step-title">上传内容物</div>
+              <div class="step-copy">源文件、封面图、演示视频或说明文档。</div>
+            </div>
+            <div class="step">
+              <div class="step-index">STEP 03</div>
+              <div class="step-title">进入审核流</div>
+              <div class="step-copy">保存草稿或直接提交资产审核。</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="form-shell glass" id="asset-form">
+          <div class="form-head">
+            <div>
+              <h2>资产上传表单</h2>
+              <p>填写基础信息、上传文件，登录后即可提交，团队成员都能在资产库看到。</p>
+            </div>
+          </div>
+
+          <form class="form-grid" id="assetForm">
+            <div class="field">
+              <label class="label" for="title">资产标题</label>
+              <input class="control" id="title" type="text" placeholder="例如：AI SKILL 工具包" />
+              <div class="field-help">建议使用便于搜索和复用的资产命名方式。</div>
+            </div>
+
+            <div class="field">
+              <label class="label" for="type">资产类型</label>
+              <select class="control" id="type">
+                <option>AI 工作流</option>
+                <option>组件资产</option>
+                <option>页面模板</option>
+                <option>交付规范</option>
+              </select>
+              <div class="field-help">用于资产库筛选和后续集合归档。</div>
+            </div>
+
+            <div class="field">
+              <label class="label" for="team">归属团队</label>
+              <select class="control" id="team">
+                <option>AI 设计小组</option>
+                <option>设计系统小组</option>
+                <option>体验设计小组</option>
+                <option>设计运营小组</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label class="label" for="scene">业务场景</label>
+              <input class="control" id="scene" type="text" placeholder="例如：设计研究 / 方法沉淀 / 多业务复用" />
+            </div>
+
+            <div class="field full">
+              <label class="label" for="summary">资产简介</label>
+              <textarea class="textarea" id="summary" placeholder="说明这个资产解决什么问题、适用于哪些业务场景、已经带来了什么业务价值，以及为什么适合进入团队复用流程。"></textarea>
+              <div class="tag-row">
+                <button class="tag active" type="button">高复用</button>
+                <button class="tag" type="button">已验证</button>
+                <button class="tag" type="button">可对外展示</button>
+                <button class="tag" type="button">需补说明</button>
+              </div>
+            </div>
+
+            <div class="field full">
+              <label class="label">上传文件 / 封面 / 演示素材（可选，最大 8MB）</label>
+              <label class="upload-box" for="assetFile">
+                <strong>点击上传或拖拽文件到这里</strong>
+                <span>支持源文件、封面图、视频、PDF 或文档说明。</span>
+              </label>
+              <input id="assetFile" type="file" hidden />
+            </div>
+            <div class="field full" id="assetFormError" style="display:none; color:#ff8080; font-size:13px;"></div>
+          </form>
+
+          <div class="form-actions">
+            <div class="form-note" id="formNote">需要登录后才能提交。</div>
+            <div class="hero-actions" style="margin-top: 0;">
+              <a class="button-secondary" href="index.html">返回首页</a>
+              <button class="button" type="submit" form="assetForm" id="assetSubmitBtn">提交审核</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="auth-modal-overlay" id="authModalOverlay" hidden>
+      <div class="auth-modal">
+        <button type="button" class="auth-modal-close" id="authCloseBtn" aria-label="关闭">✕</button>
+        <h3 id="authModalTitle">登录</h3>
+        <div class="auth-tabs">
+          <button type="button" class="auth-tab active" id="authTabLogin">登录</button>
+          <button type="button" class="auth-tab" id="authTabRegister">注册</button>
+        </div>
+        <form id="authForm">
+          <div class="auth-field">
+            <label for="authUsername">用户名</label>
+            <input id="authUsername" required placeholder="至少 2 个字符" />
+          </div>
+          <div class="auth-field">
+            <label for="authPassword">密码</label>
+            <div class="auth-password-wrap">
+              <input id="authPassword" type="password" required minlength="6" placeholder="至少 6 位" />
+              <button type="button" class="auth-password-toggle" id="authPasswordToggle" aria-label="显示/隐藏密码">👁</button>
+            </div>
+          </div>
+          <div class="auth-error" id="authError" style="display:none;"></div>
+          <div class="auth-modal-actions">
+            <button type="button" class="button-secondary" id="authCancelBtn">取消</button>
+            <button type="submit" class="button" id="authSubmitBtn">登录</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      document.querySelectorAll(".tag-row, .summary-tags").forEach((group) => {
+        const tags = group.querySelectorAll(".tag");
+        tags.forEach((tag) => {
+          tag.addEventListener("click", () => {
+            tag.classList.toggle("active");
+          });
+        });
+      });
+
+      const fileInput = document.getElementById("assetFile");
+      const uploadBox = document.querySelector(".upload-box");
+
+      if (fileInput && uploadBox) {
+        fileInput.addEventListener("change", () => {
+          const file = fileInput.files && fileInput.files[0];
+          if (!file) return;
+          const strong = uploadBox.querySelector("strong");
+          const span = uploadBox.querySelector("span");
+          if (strong) strong.textContent = "已选择文件";
+          if (span) span.textContent = `${file.name}（${(file.size / 1024).toFixed(0)}KB，提交时上传）`;
+        });
+      }
+
+      // ---- API / 登录 配置（与 AI SKILL 页面共用同一套账号系统）----
+      const API_BASE = "";
+      const AUTH_TOKEN_KEY = "palmpay_auth_token";
+      const AUTH_USER_KEY = "palmpay_auth_username";
+
+      function getToken() {
+        return localStorage.getItem(AUTH_TOKEN_KEY) || "";
+      }
+      function getUsername() {
+        return localStorage.getItem(AUTH_USER_KEY) || "";
+      }
+      function setAuth(token, username) {
+        localStorage.setItem(AUTH_TOKEN_KEY, token);
+        localStorage.setItem(AUTH_USER_KEY, username);
+      }
+      function clearAuth() {
+        localStorage.removeItem(AUTH_TOKEN_KEY);
+        localStorage.removeItem(AUTH_USER_KEY);
+      }
+
+      async function apiFetch(path, options = {}) {
+        const headers = options.headers || {};
+        const token = getToken();
+        if (token) headers["Authorization"] = "Bearer " + token;
+        const res = await fetch(API_BASE + path, { ...options, headers });
+        let data = null;
+        try {
+          data = await res.json();
+        } catch (e) {
+          data = null;
+        }
+        if (!res.ok) {
+          throw new Error((data && data.error) || "请求失败，请稍后重试");
+        }
+        return data;
+      }
+
+      async function readFileAsBase64(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onerror = () => reject(new Error("读取文件失败，请稍后重试"));
+          reader.onload = () => {
+            if (typeof reader.result !== "string") {
+              reject(new Error("读取文件失败，请稍后重试"));
+              return;
+            }
+            const commaIndex = reader.result.indexOf(",");
+            resolve(commaIndex >= 0 ? reader.result.slice(commaIndex + 1) : reader.result);
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      async function uploadFile(file) {
+        const contentBase64 = await readFileAsBase64(file);
+        return apiFetch("/api/upload", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: file.name, contentBase64 }),
+        });
+      }
+
+      // ---- 登录状态栏 ----
+      const authStatus = document.getElementById("authStatus");
+      const authLogoutBtn = document.getElementById("authLogoutBtn");
+      const authModalOverlay = document.getElementById("authModalOverlay");
+      const authModalTitle = document.getElementById("authModalTitle");
+      const authForm = document.getElementById("authForm");
+      const authTabLogin = document.getElementById("authTabLogin");
+      const authTabRegister = document.getElementById("authTabRegister");
+      const authCancelBtn = document.getElementById("authCancelBtn");
+      const authCloseBtn = document.getElementById("authCloseBtn");
+      const authError = document.getElementById("authError");
+      const authSubmitBtn = document.getElementById("authSubmitBtn");
+      const authPasswordInput = document.getElementById("authPassword");
+      const authPasswordToggle = document.getElementById("authPasswordToggle");
+      if (authPasswordToggle && authPasswordInput) {
+        authPasswordToggle.addEventListener("click", () => {
+          const isPassword = authPasswordInput.type === "password";
+          authPasswordInput.type = isPassword ? "text" : "password";
+          authPasswordToggle.textContent = isPassword ? "🙈" : "👁";
+        });
+      }
+      const assetSubmitBtn = document.getElementById("assetSubmitBtn");
+      const formNote = document.getElementById("formNote");
+      const authAvatar = document.getElementById("authAvatar");
+      const authUserTrigger = document.getElementById("authUserTrigger");
+      const authDropdown = document.getElementById("authDropdown");
+      let authMode = "login";
+
+      const AVATAR_COLORS = ["#6255B8", "#3D8BFD", "#22A06B", "#E8863B", "#D14D72", "#5FA8D3", "#9B6BFF"];
+
+      function colorForUsername(name) {
+        let hash = 0;
+        for (let i = 0; i < name.length; i++) {
+          hash = (hash * 31 + name.charCodeAt(i)) >>> 0;
+        }
+        return AVATAR_COLORS[hash % AVATAR_COLORS.length];
+      }
+
+      function setFormEnabled(enabled) {
+        const fields = [
+          document.getElementById("title"),
+          document.getElementById("type"),
+          document.getElementById("team"),
+          document.getElementById("scene"),
+          document.getElementById("summary"),
+          document.getElementById("assetFile"),
+        ];
+        fields.forEach((el) => {
+          if (el) el.disabled = !enabled;
+        });
+        document.querySelectorAll(".tag-row .tag").forEach((btn) => {
+          btn.disabled = !enabled;
+        });
+        const uploadBoxEl = document.querySelector(".upload-box");
+        if (uploadBoxEl) {
+          uploadBoxEl.style.opacity = enabled ? "1" : "0.45";
+          uploadBoxEl.style.pointerEvents = enabled ? "auto" : "none";
+        }
+        assetSubmitBtn.textContent = enabled ? "提交审核" : "请先登录";
+      }
+
+      function updateAuthUI() {
+        const username = getUsername();
+        if (username) {
+          authStatus.textContent = username;
+          authUserTrigger.hidden = false;
+          authAvatar.textContent = username.trim().charAt(0);
+          authAvatar.style.background = colorForUsername(username);
+          assetSubmitBtn.disabled = false;
+          formNote.textContent = "以「" + username + "」身份提交，仅你本人可编辑或撤回。";
+          setFormEnabled(true);
+        } else {
+          authUserTrigger.hidden = true;
+          authDropdown.hidden = true;
+          assetSubmitBtn.disabled = false;
+          formNote.textContent = "登录后才能填写和提交，请先登录。";
+          setFormEnabled(false);
+        }
+      }
+
+      if (authUserTrigger) {
+        authUserTrigger.addEventListener("click", (e) => {
+          e.stopPropagation();
+          authDropdown.hidden = !authDropdown.hidden;
+        });
+        document.addEventListener("click", (e) => {
+          if (!authUserTrigger.contains(e.target)) authDropdown.hidden = true;
+        });
+      }
+
+      function openAuthModal(mode) {
+        authMode = mode;
+        authError.style.display = "none";
+        authForm.reset();
+        if (mode === "login") {
+          authModalTitle.textContent = "登录";
+          authTabLogin.classList.add("active");
+          authTabRegister.classList.remove("active");
+          authSubmitBtn.textContent = "登录";
+        } else {
+          authModalTitle.textContent = "注册";
+          authTabRegister.classList.add("active");
+          authTabLogin.classList.remove("active");
+          authSubmitBtn.textContent = "注册";
+        }
+        authModalOverlay.hidden = false;
+        document.getElementById("authUsername").focus();
+      }
+      function closeAuthModal() {
+        authModalOverlay.hidden = true;
+      }
+
+      authTabLogin.addEventListener("click", () => openAuthModal("login"));
+      authTabRegister.addEventListener("click", () => openAuthModal("register"));
+      authCancelBtn.addEventListener("click", closeAuthModal);
+      authCloseBtn.addEventListener("click", closeAuthModal);
+      authModalOverlay.addEventListener("click", (e) => {
+        if (e.target === authModalOverlay) closeAuthModal();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && !authModalOverlay.hidden) closeAuthModal();
+      });
+
+      authLogoutBtn.addEventListener("click", async () => {
+        try {
+          await apiFetch("/api/logout", { method: "POST" });
+        } catch (e) {}
+        clearAuth();
+        updateAuthUI();
+      });
+
+      authForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        authError.style.display = "none";
+        const username = document.getElementById("authUsername").value.trim();
+        const password = document.getElementById("authPassword").value;
+        const endpoint = authMode === "login" ? "/api/login" : "/api/register";
+        authSubmitBtn.disabled = true;
+        try {
+          const data = await apiFetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password }),
+          });
+          setAuth(data.token, data.username);
+          updateAuthUI();
+          closeAuthModal();
+        } catch (err) {
+          authError.textContent = err.message;
+          authError.style.display = "block";
+        } finally {
+          authSubmitBtn.disabled = false;
+        }
+      });
+
+      // ---- 资产提交 ----
+      const assetForm = document.getElementById("assetForm");
+      const assetFormError = document.getElementById("assetFormError");
+
+      assetForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        if (!getUsername()) {
+          openAuthModal("login");
+          return;
+        }
+
+        assetFormError.style.display = "none";
+        const title = document.getElementById("title").value.trim();
+        const type = document.getElementById("type").value;
+        const team = document.getElementById("team").value;
+        const scene = document.getElementById("scene").value.trim();
+        const summary = document.getElementById("summary").value.trim();
+        const tags = Array.from(document.querySelectorAll(".tag-row .tag.active")).map((t) => t.textContent.trim());
+
+        if (!title) {
+          assetFormError.textContent = "请填写资产标题";
+          assetFormError.style.display = "block";
+          return;
+        }
+
+        const prevText = assetSubmitBtn.textContent;
+        assetSubmitBtn.disabled = true;
+        assetSubmitBtn.textContent = "提交中...";
+
+        try {
+          let fileUrl = null;
+          let fileName = null;
+          const file = fileInput.files && fileInput.files[0];
+          if (file) {
+            if (file.size > 8 * 1024 * 1024) {
+              throw new Error("文件不能超过 8MB");
+            }
+            assetSubmitBtn.textContent = "上传文件中...";
+            const uploadRes = await uploadFile(file);
+            fileUrl = uploadRes.url;
+            fileName = uploadRes.name;
+            assetSubmitBtn.textContent = "提交中...";
+          }
+
+          await apiFetch("/api/assets", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title, type, team, scene, summary, tags, file_url: fileUrl, file_name: fileName }),
+          });
+
+          assetSubmitBtn.textContent = "已提交";
+          assetForm.reset();
+          if (uploadBox) {
+            uploadBox.querySelector("strong").textContent = "点击上传或拖拽文件到这里";
+            uploadBox.querySelector("span").textContent = "支持源文件、封面图、视频、PDF 或文档说明。";
+          }
+          setTimeout(() => {
+            assetSubmitBtn.textContent = prevText;
+          }, 1800);
+        } catch (err) {
+          assetFormError.textContent = err.message;
+          assetFormError.style.display = "block";
+          assetSubmitBtn.textContent = prevText;
+        } finally {
+          assetSubmitBtn.disabled = false;
+        }
+      });
+
+      updateAuthUI();
+      if (!getUsername()) {
+        openAuthModal("login");
+      }
+    </script>
+  </body>
+</html>

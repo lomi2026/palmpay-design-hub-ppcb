@@ -1,0 +1,66 @@
+/* Shared rhythm for both workspace themes. Compact controls use 8/12/16;
+   cards and sections use 24; desktop page gutters use 40. */
+.workspace-shell {
+  --space-control: 8px;
+  --space-field: 12px;
+  --space-grid: 16px;
+  --space-card: 24px;
+  --space-section: 24px;
+  --space-page: 32px;
+  --space-gutter: 40px;
+}
+.workspace-shell main {
+  width: 100%;
+  padding: var(--space-page) !important;
+  padding-inline: var(--space-gutter) !important;
+  padding-bottom: 48px !important;
+}
+.workspace-shell main .workspace-page-card,
+html[data-design='studio'] .workspace-shell .workspace-page-card,
+html[data-design='studio'] .workspace-shell .detail-hero,
+.workspace-shell .detail-hero {
+  padding: var(--space-card) !important;
+}
+.workspace-shell .workspace-page-card h1 { margin-top: 0 !important; }
+.workspace-shell .workspace-page-card h1 + p { margin-top: 12px; }
+.workspace-shell .workspace-filter-bar { margin-top: var(--space-section); gap: 12px; }
+.workspace-shell .back-link { margin-bottom: var(--space-section); }
+.workspace-shell .composer-create > section:first-of-type,
+.workspace-shell .composer-create > section:nth-of-type(2),
+.workspace-shell .composer-editor {
+  padding: var(--space-card) !important;
+}
+.workspace-shell .composer-create > section:first-of-type > .grid { gap: 16px; }
+.workspace-shell .composer-create > section:first-of-type button { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; padding: 16px; }
+.workspace-shell .composer-create > section:first-of-type button strong { margin-top: 24px; }
+.workspace-shell .composer-workspace { gap: var(--space-section); padding-top: 0; margin-top: 16px; }
+.workspace-shell .editor-field-grid { gap: 24px 16px; }
+.workspace-shell .editor-field { gap: 8px; }
+.workspace-shell .section-heading { margin-bottom: 24px; }
+.workspace-shell .section-heading h2 { margin: 8px 0; }
+.workspace-shell .composer-actions { gap: 16px; padding-top: 24px; }
+.workspace-shell .composer-workspace > .composer-actions { margin-top: 24px; }
+.workspace-shell .content-reading-layout { gap: var(--space-section); margin-top: var(--space-section); }
+.workspace-shell .reading-sections { gap: var(--space-section); }
+.workspace-shell .reading-field-grid { gap: 24px 16px; }
+.workspace-shell .reading-field dt { margin-bottom: 8px; }
+.workspace-shell .detail-hero { column-gap: 24px; }
+.workspace-shell .reading-section { padding: var(--space-card); }
+.workspace-shell .detail-toolbar { gap: 8px; margin-top: 24px; }
+.workspace-shell .detail-metadata { gap: 24px 16px; padding-top: 24px; margin-top: 24px; }
+.workspace-shell .studio-dashboard { padding: var(--space-page); }
+.workspace-shell .studio-greeting { margin: 0 0 24px; gap: 24px; }
+.workspace-shell .studio-feature { padding: var(--space-card) !important; }
+.workspace-shell .studio-panel { padding: var(--space-card); }
+.workspace-shell main [data-slot='card-header'],
+.workspace-shell main [data-slot='card-content'],
+.workspace-shell main [data-slot='card-footer'] { padding-inline: var(--space-card); }
+.workspace-shell main th,
+.workspace-shell main td { padding: 16px; }
+@media (max-width: 767px) {
+  .workspace-shell { --space-page: 16px; --space-gutter: 20px; --space-card: 16px; --space-section: 16px; }
+  .workspace-shell main { padding-bottom: 32px !important; }
+  .workspace-shell .workspace-filter-bar > label:first-child { flex-basis: 100%; min-width: 0; }
+  .workspace-shell .detail-metadata { gap: 16px; }
+  .workspace-shell .editor-field-grid { gap: 16px; }
+}

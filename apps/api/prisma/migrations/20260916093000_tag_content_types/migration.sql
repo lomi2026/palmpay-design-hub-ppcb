@@ -1,0 +1,1 @@
+ALTER TABLE "tags" ADD COLUMN "content_types" TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[];

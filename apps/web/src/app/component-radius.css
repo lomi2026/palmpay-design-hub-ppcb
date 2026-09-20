@@ -1,0 +1,30 @@
+/* Semantic radii are invariant across hover, pressed, selected, focus and errors. */
+@layer component-states {
+  :root {
+    --radius-small: 8px;
+    --radius-control: 12px;
+    --radius-surface: 16px;
+    --radius-panel: 24px;
+  }
+  :is([data-slot='input'], [data-slot='textarea'], [data-slot='select-trigger'], button[data-variant], a[data-variant]) {
+    border-radius: var(--radius-control) !important;
+  }
+  :is([data-slot='tabs-trigger'], [data-slot='tabs-list'], [data-slot='select-item'], [data-slot='tooltip-content']) {
+    border-radius: var(--radius-small) !important;
+  }
+  .workspace-shell main > nav [data-variant] { border-radius: var(--radius-small) !important; }
+  :is([data-slot='card'], [data-slot='select-content'], .studio-entry-grid > a, .studio-draft-item, .suggested-project-card) {
+    border-radius: var(--radius-surface) !important;
+  }
+  :is([data-slot='dialog-content'], [data-slot='sheet-content'], .workspace-page-card, .studio-panel, .detail-hero, .reading-section, .composer-editor, .composer-create) {
+    border-radius: var(--radius-panel) !important;
+  }
+  [data-card-link] { border-radius: inherit !important; }
+  [data-slot='tabs-list'][data-variant='line'] { border-radius: 0 !important; }
+}
+@layer component-states {
+  [data-slot='select-content'][data-slot][data-slot] { border-radius: 12px !important; }
+  [data-slot='select-content'] [data-slot='select-item'] { border-radius: 10px !important; }
+  [data-slot='select-content'][data-slot][data-slot][data-density='compact'],
+  [data-slot='select-content'][data-slot][data-slot][data-density='compact'] [data-slot='select-item'] { border-radius: 8px !important; }
+}
