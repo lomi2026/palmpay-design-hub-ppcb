@@ -1,3 +1,9 @@
+## 2026-09-20 PPCB 项目外链切换已在本地完成
+
+项目详情页的“查看项目”和底部项目链接统一通过 `getProjectPageUrl` 解析：仅把旧 GitHub Pages 路径下 P01–P26、S01–S07 的链接映射到 `https://lomi2026.github.io/palmpay-design-hub-ppcb/projects/project-detail.html?id=…`。已存在的新链接、其他外链与未知编号保持原样；数据库中的来源快照保留，不执行迁移或业务数据写入。底部入口文字改为“查看项目页面”。
+
+Web 73 项测试（含实际快照全部 33 条旧链接和边界情况）、Lint、类型检查通过；PPCB testing/production 两套生产构建均通过。本轮只准备本地候选代码，不生成发布包、不上传、不构建或发布 PPCB；下次测试发布仍须实时获取平台 baseRevision 并对候选包预检。静态项目目录继续排除在 PPCB 源码包外。
+
 ## 2026-09-20 AI 项目页面已在新 GitHub Pages 公开上线
 
 用户明确授权将 `lomi2026/palmpay-design-hub-ppcb` 整个仓库改为公开。GitHub Pages 工作流 `35499334743` 成功，只部署 `project-pages/`；目录入口为 `https://lomi2026.github.io/palmpay-design-hub-ppcb/`，详情入口为 `projects/project-detail.html?id=P01`（支持 P01–P26、S01–S07）。
