@@ -1,3 +1,12 @@
+## 2026-09-20 PPCB 独立外链候选已发布测试环境
+
+- 本地提交 `5af01bb` 已推送到独立 GitHub 仓库；候选包 `palmpay-ppcb-5af01bb5202e.zip` 为 7,016,329 字节，SHA-256 `1c289346ea722e72fc66d851b842318133d8db7e7d824d031e7bb760f7f02161`。包内 444 项、11 个 migration，未包含环境文件、密钥、备份、依赖目录、Git 元数据或 `project-pages/`。
+- PPCB 上传、合并校验和预检通过。预检仅有 localhost 内部回环、OpenSSL 系统包及在线锁定依赖三项已知非阻断提示。源码版本 `REV-MU9RWAAL-3F50E92B54`，构建 `BUILD-MU9RWAAK-A43BC11DA2` 使用 large 档成功，耗时 20 分 51 秒；期间公共依赖下载较慢但持续推进，没有重传或重建。
+- 测试版本 `REL-MU9SNB8A-3F257008A2` 已发布到 `https://ppcloudebase.palmpay-inc.com/apps/palmpay-design-hub-builder-test/`，状态 `PUBLIC_READY`。两个实例均 Running/Ready、0 重启；平台内部 `/healthz` 与首页返回 200，未登录 `/api/me`、内容接口返回 401。运行日志无 ERROR/Exception，两个实例都记录 `initialized:false`、`Existing organization preserved.`，且没有历史内容或封面 import 日志。
+- 真实钉钉登录后浏览器确认 AI 项目库显示 33 个已发布项目，P01 详情保持测试子路径，“查看项目”指向并成功打开 `https://lomi2026.github.io/palmpay-design-hub-ppcb/projects/project-detail.html?id=P01`。静态页公开加载正常。静态页“返回项目库”仍固定指向 PPCB 生产入口；测试验收不点击该链接继续写操作。
+- 本次没有数据库结构迁移，没有重复导入或覆盖已有组织、内容、版本、分类、权限与封面。生产仍为 `REL-MU9GI4EH-EADA266DB3`，本轮未晋级、未切流、未修改生产数据。后续生产晋级须基于本测试候选单独确认，并复用同一不可变镜像。
+- 发布协作规则按用户最新决定更新：遇到问题先保留证据、只读诊断并给出可选处理方案；不会因一般异常自行终止整次发布。阻断步骤在问题解决前不继续产生副作用，需要终止整次发布时先取得用户确认。
+
 ## 2026-09-20 最小发布流程与启动数据保护已在本地完成
 
 - 新增 [一页发布检查卡](20-PPCB-RELEASE-CHECKLIST.md)，同步 15、19 和部署 README：普通更新使用成功基线、一次测试构建、同镜像晋级；日常不重读全部历史、不重复执行同一候选的有效检查，无新数据库需求不导入业务数据。
