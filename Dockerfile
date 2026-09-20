@@ -6,19 +6,9 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 RUN corepack enable
 
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY apps/api/package.json apps/api/package.json
-COPY apps/web/package.json apps/web/package.json
-COPY packages/config/package.json packages/config/package.json
-COPY packages/schemas/package.json packages/schemas/package.json
-COPY packages/types/package.json packages/types/package.json
-COPY packages/ui/package.json packages/ui/package.json
-RUN pnpm install --frozen-lockfile
-
-COPY apps apps
-COPY packages packages
-COPY deployment deployment
+COPY . .
 RUN set -eux; \
+  pnpm install --frozen-lockfile; \
   DATABASE_URL="postgresql://build:build@localhost:5432/build" pnpm --filter @palmpay/api build; \
   node deployment/ppcb/build.mjs; \
   node deployment/ppcb/package-runtime.mjs /out/ppcb-web; \

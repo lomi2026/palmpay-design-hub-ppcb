@@ -38,7 +38,7 @@ const asDataSecurityLevel = (value: unknown): DataSecurityLevel => {
   return DataSecurityLevel.INTERNAL;
 };
 
-/** Imports the user-approved local published catalog. It is safe to run repeatedly. */
+/** Legacy migration utility: overwrites existing records; never invoke during ordinary startup. */
 export async function importPpcbPublishedContent(prisma: PrismaClient) {
   const organization = await prisma.organization.findUnique({ where: { code: organizationCode } });
   if (!organization) throw new Error(`Organization not found: ${organizationCode}`);

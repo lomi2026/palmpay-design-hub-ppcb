@@ -1,26 +1,30 @@
 # PPCB deployment
 
-Application: `palmpay-design-hub-builder`. Current release procedure: [PPCB release standard](../../docs/19-PPCB-RELEASE-STANDARD.md). Use the verified commit in the dedicated PPCB workspace and reconcile the latest managed revision before every release; historical commit IDs below are not current release candidates.
+Application: `palmpay-design-hub-builder`. Daily release procedure: [one-page checklist](../../docs/20-PPCB-RELEASE-CHECKLIST.md); exceptions and history: [release standard](../../docs/19-PPCB-RELEASE-STANDARD.md). Use the verified commit in the dedicated PPCB workspace and reconcile the latest managed revision before every release; historical commit IDs below are not current release candidates.
 
 The user selected isolated testing and Owner-managed DingTalk access. This source keeps the formal Next.js/NestJS/Prisma architecture and latest approved visual and direct-publication behavior.
 
 ## Runtime
 
 - PPCB and Render use `node:24-bookworm-slim`; the project requires Node.js >=24. PPCB retains the platform-maintainer-provided Debian OpenSSL installation required by Prisma. The user requested reverting the Node.js 22 experiment on 2026-09-17.
-- The PPCB Dockerfile deliberately uses one build stage. Dependency manifests are copied and installed before application source, so a small code-only change can reuse the dependency layer when the PPCB builder cache is available. Application builds, traced-runtime packaging and development-file cleanup remain in the same final layer. This avoids the PPCB/Kaniko context loss seen when a later named stage tried to resolve `/workspace/src/package.json`, while keeping the assembled application runtime at about 88 MB before base-image overhead.
+- The PPCB Dockerfile deliberately uses one build stage. It restores the successful baseline: COPY the source once, then install locked dependencies, build, trace/package the runtime and clean development files in the same layer. Do not rearrange COPY/install steps for speculative cache gains. This avoids the PPCB/Kaniko context loss seen when a later named stage tried to resolve `/workspace/src/package.json`, while keeping the assembled application runtime at about 88 MB before base-image overhead.
 
 - One immutable image contains the testing and production Next.js builds. Next.js basePath is compiled, so the runtime selects the matching prebuilt output using the platform-injected database schema. No rebuilding occurs during promotion.
 - The external listener uses `PORT` and routes to loopback-only Web/API processes. It removes development/bearer authentication and generates a runtime-only internal secret. Identity comes from the trusted PPCB gateway.
 - Missing identity is rejected. Existing organization/team scopes and disabled/deleted-user enforcement remain. Effective permissions are the intersection of stored Hub role grants and PPCB application grants.
 - The configured Owner identity maps to the documented legacy Owner email. Other PPCB users receive a stable employee identity key and a reserved internal email key. Legacy employee mappings must be reviewed before migration; email alone never links arbitrary incoming users.
-- Both environments apply migrations and idempotent organization/role/permission defaults, followed by the approved bundled content import using target-environment identity mappings. Cover import failures are logged without blocking startup; release acceptance must separately confirm that required covers were imported. Health alone does not certify migration completeness.
+- Both environments check the migration ledger and apply only pending migrations. A transaction and advisory lock initialize defaults only when the target organization is absent. Existing organizations are left unchanged, including edited categories and revoked role grants. Ordinary startup never imports historical content or covers. A fresh environment has no historical content; migration and partial-configuration repair require a separate reviewed operation.
 - The schema is validated against the selected application and used by Prisma queries, raw SQL, seeding and migrations. Each pooled connection receives its own search_path; SSL is disabled as required by PPCB.
 - `/healthz` requires a responding database and Next.js process. It is a liveness/readiness check, not evidence that attachments or data migration have passed.
 - PPCB environments use the platform private-OSS business-file contract. The backend requests one-object upload URLs, confirms completed uploads, stores only the returned PPCB `fileId`, and requests short-lived download URLs after application authorization. Browser code never receives the runtime token or OSS credentials.
-- The 48-content migration includes the five READY cover images actually referenced by published content. Startup verifies the bundled bytes and SHA-256 values, uploads them idempotently to the target environment's private storage, and links them after the content import. The published set has no other attachment relations or case-evidence files.
-- Bundled cover discovery is anchored to the compiled migration module rather than the process working directory, because PPCB launches the seed from `/app/apps/api` while the immutable files live under `/app/deployment/ppcb/content-files`.
+- The historical migration utility covers 48 contents and five READY cover images. It remains in source for provenance, but is disconnected from ordinary startup and may overwrite later edits if invoked. Do not rerun it during code releases. Existing files stay in the target environment's PPCB storage.
+- Bundled cover discovery is anchored to the compiled migration module rather than the process working directory, the historical importer used `/app/apps/api` as its working directory while the immutable files live under `/app/deployment/ppcb/content-files`.
 - Local development keeps the local storage driver. The legacy R2 adapter remains available for the original hosting environment during cutover, but the PPCB image sets `FILE_STORAGE_DRIVER=ppcb` and does not require R2 configuration.
 - The published PPCB file contract does not expose object deletion. Removing an attachment revokes its application reference immediately, while the private orphan remains platform-internal until PPCB lifecycle cleanup is available.
+
+## Local startup regression
+
+Build the API first. The initialization regression accepts only a disposable local database named `palmpay_ppcb_release_check_<suffix>` via `PPCB_INITIALIZATION_TEST_DATABASE_URL`; run `node --test apps/api/test/ppcb-runtime-initialization.test.mjs` from the repository root with that variable set. It creates/drops its own two schemas and checks concurrent initialization plus unchanged table rows after actual startup entry execution. It skips when the variable is absent; a skip is not a pass. Delete the disposable database after verification.
 
 ## Required runtime secrets
 
@@ -34,7 +38,7 @@ If the original hosting environment remains online during acceptance, keep its e
 2. Commit the verified release changes, then run `pnpm ppcb:package`. The command creates a ZIP from the committed revision only and includes source, lockfile, workspace manifests, Dockerfile and this deployment directory. The selected paths omit legacy snapshots and general documentation. Inspect the actual archive to ensure no .env*, dependencies, generated output, private configurations or backups are tracked under the selected paths.
 3. Download the latest managed PPCB source revision and use its revision ID as `baseRevision`. Complete source preflight once, then publish the generated ZIP to testing once.
 4. Use `app_test_request` for real runtime health/pages/API and temporary isolated CRUD. Validate browser navigation, uploads/downloads, signed URL expiry and denied access. After a confirmed failure, stop and report; fix and republish only within renewed user authorization.
-5. For migration changes, re-inventory the explicitly approved source scope, identity mapping, foreign keys and file checksums. The recorded approved set is 48 contents and five referenced covers, not the entire historical backup or all nine exported objects. Keep raw backups and exports outside Git.
+5. Normal code releases do not re-import content or covers. For explicitly authorized migration changes, re-inventory the explicitly approved source scope, identity mapping, foreign keys and file checksums. The recorded approved set is 48 contents and five referenced covers, not the entire historical backup or all nine exported objects. Keep raw backups and exports outside Git.
 6. Verify testing files and production configuration separately. Preserve the original hosting/storage until production acceptance and explicit retirement authorization; do not copy testing drafts into production.
 7. Obtain production confirmation after the tested release and migration impact are reviewable. Promote the exact tested image, verify production behavior and record remaining acceptance gaps.
 
@@ -49,6 +53,10 @@ Small code changes still require a new immutable image; PPCB does not currently 
 3. Preflight and publish the archive to the isolated testing environment.
 4. Test the changed feature plus health, login, permissions and file upload/download when affected.
 5. After explicit production confirmation, promote the exact tested image with `app_promote_test_to_production`. Promotion does not rebuild or re-upload source.
+
+Previous deployed images still contain startup imports: do not treat a rollback/restart of those images as data-neutral. Establish a verified import-free rollback baseline before normal production releases.
+
+The independent static project pages currently return to the production library. During testing, that return navigation crosses environments; do not perform test writes after following it. This is a known acceptance limitation, not environment-aware routing.
 
 Content, cover and attachment updates made through the application do not require a code release. Batch related code fixes into one verified testing build instead of publishing each file separately.
 

@@ -19,7 +19,8 @@ docs
 *.tgz
 *.tar
 *.tar.gz
-*.sql
 *.dump
 *.bak
 *.log
+project-pages
+**/.next-*

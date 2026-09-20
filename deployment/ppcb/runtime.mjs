@@ -53,10 +53,8 @@ async function run(command, args, cwd, childEnv = env) {
 }
 // Both schemas run the same committed migrations. No production data is copied to testing.
 await run('node', ['dist/runtime-migrate.js'], resolve(root, 'apps/api'));
-// Both environments need the idempotent organization, role and permission baseline
-// before PPCB can resolve the gateway identity.
-// The bundled catalog and its referenced covers are imported idempotently into
-// each environment, so the same immutable image can be verified before promotion.
+// Bootstrap defaults only for an empty environment. Existing organizations are
+// preserved; historical content and cover imports are not part of startup.
 await run('node', ['dist/runtime-seed.js'], resolve(root, 'apps/api'));
 for (const [name, command, args, cwd, port] of [
   ['api', 'node', ['dist/main.js'], 'apps/api', '3001'],
