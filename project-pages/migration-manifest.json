@@ -1,0 +1,204 @@
+{
+  "source": "https://lomi2026.github.io/palmpay-design-intelligence/",
+  "returnUrl": "https://ppcloudebase.palmpay-inc.com/apps/palmpay-design-hub-builder/workspace/ai-projects",
+  "projects": [
+    {
+      "code": "P01",
+      "title": "AI 需求分析与体验策略中心",
+      "file": "project-detail-p01-fbb774931e86.js",
+      "sourceSha256": "fbb774931e86a72c2a59a007a2606b9b2ad27f601971679c583d4a36e86fa0aa"
+    },
+    {
+      "code": "P02",
+      "title": "AI 用户反馈与机会发现系统",
+      "file": "project-detail-p02-9bddbefb56b2.js",
+      "sourceSha256": "9bddbefb56b2d6a84534208080962c1e90111961c8588a13d1c410c8edbc4905"
+    },
+    {
+      "code": "P03",
+      "title": "AI 设计系统与设计开发一体化",
+      "file": "project-detail-p03-3dbb48aedc92.js",
+      "sourceSha256": "3dbb48aedc9294b3199d58c2722ca8e95385fa39943848a2b2e23fa3a22e6065"
+    },
+    {
+      "code": "P04",
+      "title": "AI 产品质量门禁",
+      "file": "project-detail-p04-6ed25352f2a4.js",
+      "sourceSha256": "6ed25352f2a4ece897470f13e8c5bf32c47f1a7877b33a3227d9fb9fb751ed0c"
+    },
+    {
+      "code": "P05",
+      "title": "体验增长实验工厂",
+      "file": "project-detail-p05-d3ea13af3c49.js",
+      "sourceSha256": "d3ea13af3c497b6df564a64d732aa563d26f2f4b969f0c7f6aa2e2ae5858e700"
+    },
+    {
+      "code": "P06",
+      "title": "产品内 AI 体验升级",
+      "file": "project-detail-p06-cf16f7a73488.js",
+      "sourceSha256": "cf16f7a7348840274bc996e25e804a737af8b04cfde3aab74314642374016496"
+    },
+    {
+      "code": "P07",
+      "title": "AI 核心漏斗诊断中心",
+      "file": "project-detail-p07-e3855e5d0742.js",
+      "sourceSha256": "e3855e5d074252b264a838ee0ce951ab05e417aec00b19fbf79e885580f6ce77"
+    },
+    {
+      "code": "P08",
+      "title": "AI 新用户激活助手",
+      "file": "project-detail-p08-8d56bad95ff0.js",
+      "sourceSha256": "8d56bad95ff0cfa42e6cd16077ae9f0808b42c32fe6fa48708f6c7649e772615"
+    },
+    {
+      "code": "P09",
+      "title": "AI 功能渗透增长助手",
+      "file": "project-detail-p09-39432e7f569f.js",
+      "sourceSha256": "39432e7f569f63b85bf3e2beef90898269c499f06c264c9bf6b7b52c6dd8b2ca"
+    },
+    {
+      "code": "P10",
+      "title": "AI 流失用户召回分析",
+      "file": "project-detail-p10-51f10fd4977c.js",
+      "sourceSha256": "51f10fd4977c102b3ca353c936bbc6a6c82ac2b65d9036a7f05bd32c4fe94367"
+    },
+    {
+      "code": "P11",
+      "title": "AI 客服问题产品化系统",
+      "file": "project-detail-p11-24a283337b8f.js",
+      "sourceSha256": "24a283337b8f81ce6e8f150e8088117ce6e59e59d80fb9e9123ca47514ffc12e"
+    },
+    {
+      "code": "P12",
+      "title": "AI 运营工作台助手",
+      "file": "project-detail-p12-0708e251c901.js",
+      "sourceSha256": "0708e251c90174974fd0e741f73e1a657baddd0325995d7048f8b347dec0f696"
+    },
+    {
+      "code": "P13",
+      "title": "AI 审核材料预检",
+      "file": "project-detail-p13-397e311c4b60.js",
+      "sourceSha256": "397e311c4b607e77bfbc23bb1bf4ae2090ae74768ee86066041cdc00059c3b79"
+    },
+    {
+      "code": "P14",
+      "title": "AI 智能报表生成器",
+      "file": "project-detail-p14-130317d60c73.js",
+      "sourceSha256": "130317d60c737207a7817db4e9066e438d773c3d522da68aae3d6ea010829e4c"
+    },
+    {
+      "code": "P15",
+      "title": "AI PRD 风险扫描器",
+      "file": "project-detail-p15-1c7cba2cd695.js",
+      "sourceSha256": "1c7cba2cd69580f565a7f5a255a3797e4686654794c8b565db9f88c48b65b4b8"
+    },
+    {
+      "code": "P16",
+      "title": "AI 体验债务管理系统",
+      "file": "project-detail-p16-2c69cf0fd5c3.js",
+      "sourceSha256": "2c69cf0fd5c3fb69a14f0ab48476d9abc759d52901dc1c548e1ff66131ed3415"
+    },
+    {
+      "code": "P17",
+      "title": "AI 竞品与行业变化雷达",
+      "file": "project-detail-p17-d09393e0f9d1.js",
+      "sourceSha256": "d09393e0f9d11b086ab682b9141068afeaa85189fcde0968910141eaade0c369"
+    },
+    {
+      "code": "P18",
+      "title": "AI 用户研究助手",
+      "file": "project-detail-p18-8529dc327272.js",
+      "sourceSha256": "8529dc32727230ff21bb30af1e131fb97fd2bac7e354f4e656536232edc55dba"
+    },
+    {
+      "code": "P19",
+      "title": "AI 页面状态生成器",
+      "file": "project-detail-p19-f273bf80d421.js",
+      "sourceSha256": "f273bf80d42176d866ad778a2117c58edbbbb070a5a6bf463f3c8d3df615fe71"
+    },
+    {
+      "code": "P20",
+      "title": "AI 原型批量生成工作流",
+      "file": "project-detail-p20-20f572308165.js",
+      "sourceSha256": "20f572308165bfe84d8f44491df32888dc0e082de0f374c538272825e0de65f3"
+    },
+    {
+      "code": "P21",
+      "title": "AI 文案与内容治理中心",
+      "file": "project-detail-p21-141285eeda38.js",
+      "sourceSha256": "141285eeda380ee0f6931517ec3eae48b8caa28827c04961051741665e0ad477"
+    },
+    {
+      "code": "P22",
+      "title": "AI 多语言与本地化体验检查",
+      "file": "project-detail-p22-3e52e69d6c42.js",
+      "sourceSha256": "3e52e69d6c425383f705a27770e383bbce65fe9dd50b91334fd817bc82457bce"
+    },
+    {
+      "code": "P23",
+      "title": "AI 高风险操作体验审计",
+      "file": "project-detail-p23-abcaf722289d.js",
+      "sourceSha256": "abcaf722289dc3d87131c316f1ab5c329546c35c33a0583b76439118b545e651"
+    },
+    {
+      "code": "P24",
+      "title": "AI 合规规则体验转译器",
+      "file": "project-detail-p24-15aa57f57960.js",
+      "sourceSha256": "15aa57f57960e77239af9bca20cdd19da5643b317ed3fd33efc18f561c0d955b"
+    },
+    {
+      "code": "P25",
+      "title": "AI 设计决策知识库",
+      "file": "project-detail-p25-29e0b9cda076.js",
+      "sourceSha256": "29e0b9cda0765e5b5803faf66d77227394cc289fa3ba21a20426cd06d9df2d95"
+    },
+    {
+      "code": "P26",
+      "title": "AI 团队能力诊断与培训系统",
+      "file": "project-detail-p26-46d79cc14a01.js",
+      "sourceSha256": "46d79cc14a017faf4c067b3f57e9425e669078e43e77db9381bf9b350f5cb659"
+    },
+    {
+      "code": "S01",
+      "title": "体验设计团队北极星指标对焦板",
+      "file": "project-detail-s01-eb9c59449b1d.js",
+      "sourceSha256": "eb9c59449b1de584d75fa841f7a5e7da82f91fd2aa4917f1ea22ffbd365c1c41"
+    },
+    {
+      "code": "S02",
+      "title": "设计团队升级为体验增长部门",
+      "file": "project-detail-s02-823e94982557.js",
+      "sourceSha256": "823e94982557295347f3da75016535c6aa849c3467d9bc1563b199a22fee23cc"
+    },
+    {
+      "code": "S03",
+      "title": "把设计指标与业务指标绑定",
+      "file": "project-detail-s03-3233dae0bfaa.js",
+      "sourceSha256": "3233dae0bfaa506069810ae3a5b3c224a63b318a9eef5b43dfbf458e715cc295"
+    },
+    {
+      "code": "S04",
+      "title": "设计团队组织如何调整",
+      "file": "project-detail-s04-8f42343337ba.js",
+      "sourceSha256": "8f42343337bac99d8594718531e49ba1b7720518cae44845ce01314c6959c975"
+    },
+    {
+      "code": "S05",
+      "title": "90 天执行计划",
+      "file": "project-detail-s05-10c63d30aee3.js",
+      "sourceSha256": "10c63d30aee3a48b3ff978a854b086be5ce85a4f00efaa7d2cf377a90573f549"
+    },
+    {
+      "code": "S06",
+      "title": "设计团队固定周运行机制",
+      "file": "project-detail-s06-c9b3a568d5d0.js",
+      "sourceSha256": "c9b3a568d5d0af0f17f1dcce1c27ff3a163c461cc6b7125dbcae2f9ec5ceb29b"
+    },
+    {
+      "code": "S07",
+      "title": "设计团队 AI 转型组织与运行机制",
+      "file": "project-detail-s07-5a209f8812dd.js",
+      "sourceSha256": "5a209f8812ddf497a66188a3c07793d31a943e02a4e2b6c605f1d3b47eea1dcc"
+    }
+  ]
+}

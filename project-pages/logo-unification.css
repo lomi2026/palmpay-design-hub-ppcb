@@ -1,0 +1,38 @@
+/* Unified PalmPay brand mark used across the homepage, workspace and project details. */
+.pp-unified-nav-logo,
+.brand-mark.pp-unified-nav-logo,
+.logo.pp-unified-nav-logo,
+.pp-platform-logo.pp-unified-nav-logo{
+  width:32px !important;
+  height:32px !important;
+  min-width:32px !important;
+  display:grid !important;
+  place-items:center !important;
+  overflow:visible !important;
+  border:0 !important;
+  border-radius:10px !important;
+  background:transparent !important;
+  color:transparent !important;
+  box-shadow:none !important;
+  line-height:0 !important;
+}
+.pp-unified-nav-logo img,
+.brand-mark.pp-unified-nav-logo img,
+.logo.pp-unified-nav-logo img,
+.pp-platform-logo.pp-unified-nav-logo img{
+  width:24px !important;
+  height:27px !important;
+  max-width:24px !important;
+  max-height:27px !important;
+  display:block !important;
+  border:0 !important;
+  border-radius:0 !important;
+  object-fit:contain !important;
+  filter:none !important;
+  opacity:1 !important;
+}
+html[data-theme="light"] .pp-unified-nav-logo img,
+html:not([data-theme]):not(.dark) .pp-unified-nav-logo img{
+  filter:invert(1) !important;
+}
+.brand .pp-unified-nav-logo{margin-right:0}
