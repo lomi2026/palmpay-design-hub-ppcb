@@ -1,3 +1,10 @@
+## 2026-09-21 PPCB 独立外链候选已发布生产环境
+
+- 用户明确授权生产发布后，将已验收测试版本 `REL-MU9SNB8A-3F257008A2` 的同一不可变镜像直接晋级生产；没有重新打包、上传或构建。生产操作 `OP-MUALPC91-18948EB715` 成功，生产版本为 `REL-MUALPC91-47AFA2E5EC`，入口为 `https://ppcloudebase.palmpay-inc.com/apps/palmpay-design-hub-builder/`。
+- PPCB 状态为 `HEALTHY`，生产 Deployment 为 `PUBLIC_READY`。两个实例均 Running，desired/ready/updated/available 均为 2；启动阶段短暂 connection refused/503 后正常就绪，0 ERROR、0 Exception、0 小写 error 日志。公网 `/healthz` 返回 `200 {"status":"ok","environment":"production"}`。
+- 两个生产实例都记录 `initialized:false`、`Existing organization preserved.`，没有内容或封面 import 日志。本次没有数据库结构迁移，也没有部署期的历史内容、版本、分类、权限或封面重复导入和覆盖。
+- 真实钉钉登录后的生产浏览器验收通过：AI 项目库在生产子路径显示 33 个已发布项目，P01 详情正常加载，“查看项目”和“查看项目页面”均指向 `https://lomi2026.github.io/palmpay-design-hub-ppcb/projects/project-detail.html?id=P01`。该静态页的“返回项目库”指向生产入口，在线上使用符合预期。
+
 ## 2026-09-20 PPCB 独立外链候选已发布测试环境
 
 - 本地提交 `5af01bb` 已推送到独立 GitHub 仓库；候选包 `palmpay-ppcb-5af01bb5202e.zip` 为 7,016,329 字节，SHA-256 `1c289346ea722e72fc66d851b842318133d8db7e7d824d031e7bb760f7f02161`。包内 444 项、11 个 migration，未包含环境文件、密钥、备份、依赖目录、Git 元数据或 `project-pages/`。
