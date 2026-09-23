@@ -1,3 +1,11 @@
+## 2026-09-23 PPCB 普通成员访问权限已修复并发布
+
+- 其他钉钉成员能够完成企业登录，但进入 `/workspace` 后出现“页面暂时不可用”。测试环境运行日志在 `2026-09-23 18:38:59 +08:00` 记录 `当前账号没有执行此操作的权限`；同一时段 Deployment 与两个实例均正常，排除发布中断或页面服务不可用。
+- 根因是 PPCB 使用 `enterprise_login`，普通员工以 `User` 进入，但 12 项平台权限定义此前全部只授予 `Owner`、`Maintainer`。应用后端又将数据库角色权限与 PPCB 转发权限取交集，导致普通成员最终权限为空。
+- 已通过 PPCB 权限配置发布最小修复：`User` 与 `Operator` 获得 `content.read`、`content.create`、`content.edit_own`、`ai.execute`；内容全量管理、下架、归档、分析、用户、分类、审计和 AI 管理继续仅限 `Owner`、`Maintainer`。未修改数据库角色、业务数据或源码镜像。
+- 发布后实时核对确认运行时权限定义已更新；测试 `REL-MU9SNB8A-3F257008A2` 与生产 `REL-MUALPC91-47AFA2E5EC` 均为 `PUBLIC_READY`，两个环境各 2 个实例全部 Running/Ready、0 重启。权限配置直接作用于两个环境，因此未重新上传源码、构建镜像或执行数据库迁移。
+- 后续发布必须分别用 Owner 和普通 `User` 真实登录验收工作台；不能以 Owner 可访问或未登录返回 401 代替普通成员权限验证。
+
 ## 2026-09-21 PPCB 独立外链候选已发布生产环境
 
 - 用户明确授权生产发布后，将已验收测试版本 `REL-MU9SNB8A-3F257008A2` 的同一不可变镜像直接晋级生产；没有重新打包、上传或构建。生产操作 `OP-MUALPC91-18948EB715` 成功，生产版本为 `REL-MUALPC91-47AFA2E5EC`，入口为 `https://ppcloudebase.palmpay-inc.com/apps/palmpay-design-hub-builder/`。

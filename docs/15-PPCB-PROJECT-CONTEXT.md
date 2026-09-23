@@ -13,17 +13,18 @@
 
 该目录是 PPCB 版本后续开发、测试、迁移、发布和运维的唯一工作目录。`/Users/a1/Documents/plampay-design-intelligence` 保留为原托管版本与历史代码基线，不应直接用于 PPCB 发布。视觉与信息架构仍以最终 v9-1 网站为批准基线，但运行架构以本目录的 Next.js、NestJS、Prisma、PostgreSQL 和 PPCB 托管能力为准。
 
-## 最近记录的线上状态（2026-09-21，发布后实时复核）
+## 最近记录的线上状态（2026-09-23，权限修复后实时复核）
 
 - 测试入口：`https://ppcloudebase.palmpay-inc.com/apps/palmpay-design-hub-builder-test/`
 - 测试版本：`REL-MU9SNB8A-3F257008A2`
 - 生产入口：`https://ppcloudebase.palmpay-inc.com/apps/palmpay-design-hub-builder/`
 - 生产版本：`REL-MUALPC91-47AFA2E5EC`
 - 当前生产直接晋级自测试版本 `REL-MU9SNB8A-3F257008A2` 的同一不可变镜像，没有重新构建。
-- 测试与生产均使用独立 PostgreSQL schema、钉钉统一登录和 `app_managed` 授权。
+- 测试与生产均使用独立 PostgreSQL schema 和钉钉 `enterprise_login`。企业内有效员工默认以 `User` 进入；PPCB 平台权限与应用数据库角色权限取交集。
+- `User`、`Operator` 的平台基础权限为 `content.read`、`content.create`、`content.edit_own`、`ai.execute`；其余管理权限仅授予 `Owner`、`Maintainer`。2026-09-23 已实时确认该配置同时进入测试与生产运行时。
 - PPCB 环境使用平台私有 OSS 文件能力；PPCB 运行不需要原 Cloudflare R2 凭据。
 
-最新测试与生产版本的两个实例均全部就绪，启动均记录 `initialized:false`、保留现有组织，没有内容或封面导入日志。平台健康、生产公网健康检查、未登录权限边界、真实登录后的 33 项项目库及 P01 新仓库外链已验收。生产 Deployment 为 `PUBLIC_READY`，公网 `/healthz` 返回 production/ok。
+最新测试与生产版本的两个实例均全部就绪，启动均记录 `initialized:false`、保留现有组织，没有内容或封面导入日志。平台健康、生产公网健康检查、未登录权限边界、Owner 登录后的 33 项项目库及 P01 新仓库外链已验收。生产 Deployment 为 `PUBLIC_READY`，公网 `/healthz` 返回 production/ok。普通 `User` 的权限配置已修复，后续由非 Owner 员工重登完成最终端到端验收。
 
 ## 发布流程
 
