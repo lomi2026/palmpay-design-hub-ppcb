@@ -31,6 +31,7 @@ export interface AIProjectDetail extends AIProjectCard {
     expectedOutcome: string | null;
     riskLevel: string | null;
     evaluationResult: unknown;
+    convertedProjectRef: string | null;
     suggestedOwnerTeam: { id: string; name: string; code: string } | null;
   } | null;
   attachments: PublishedAttachment[];
@@ -93,4 +94,12 @@ export function getProjectPageUrl(sourceUrl: string | undefined): string | undef
     // Preserve existing handling of unrelated or malformed source values.
   }
   return sourceUrl;
+}
+
+/** Prefer migrated source provenance, then use the official project reference entered in V1.0. */
+export function resolveProjectPageUrl(
+  body: ImportedProjectBody,
+  convertedProjectRef: string | null | undefined,
+): string | undefined {
+  return getProjectPageUrl(body.source?.legacyProjectUrl ?? convertedProjectRef ?? undefined);
 }

@@ -8,7 +8,7 @@ import { ArrowLeft, ArrowRight, ExternalLink, MoreHorizontal } from 'lucide-reac
 import { ApiError, serverApiFetch } from '@/lib/api';
 import {
   getImportedProjectBody,
-  getProjectPageUrl,
+  resolveProjectPageUrl,
   stageLabels,
   verificationLabels,
   type AIProjectDetail,
@@ -62,7 +62,7 @@ async function AIProjectDetailPage({
   const canArchive = currentUser?.permissions.includes('content.archive') ?? false;
   const detail = project.projectDetail;
   const body = getImportedProjectBody(project.currentVersion?.body);
-  const projectPageUrl = getProjectPageUrl(body.source?.legacyProjectUrl);
+  const projectPageUrl = resolveProjectPageUrl(body, detail?.convertedProjectRef);
   const priority = body.prioritization;
   const stage = detail ? stageLabels[detail.projectStage] : '待补充';
   const projectCode = detail?.projectCode ?? 'AI 项目';

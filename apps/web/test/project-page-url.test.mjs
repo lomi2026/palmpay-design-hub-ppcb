@@ -8,7 +8,7 @@ const target = { exports: {} };
 const source = readFileSync(new URL('../src/lib/ai-projects.ts', import.meta.url), 'utf8');
 const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText;
 runInNewContext(compiled, { exports: target.exports, module: target, URL });
-const { getProjectPageUrl } = target.exports;
+const { getProjectPageUrl, resolveProjectPageUrl } = target.exports;
 const oldRoot = 'https://lomi2026.github.io/palmpay-design-intelligence/projects/project-detail.html';
 const newRoot = 'https://lomi2026.github.io/palmpay-design-hub-ppcb/projects/project-detail.html';
 
@@ -25,4 +25,13 @@ test('existing new links, unrelated projects and unknown IDs are preserved', () 
   }
   assert.equal(getProjectPageUrl(''), undefined);
   assert.equal(getProjectPageUrl(oldRoot + '?id=P01&from=hub#chapter-1'), newRoot + '?id=P01&from=hub#chapter-1');
+});
+
+test('newly created projects use their official project reference when no migrated source URL exists', () => {
+  const officialUrl = newRoot + '?id=P27';
+  assert.equal(resolveProjectPageUrl({}, officialUrl), officialUrl);
+  assert.equal(
+    resolveProjectPageUrl({ source: { legacyProjectUrl: oldRoot + '?id=P01' } }, officialUrl),
+    newRoot + '?id=P01',
+  );
 });
