@@ -30,8 +30,8 @@ import {
 
 const roleLabels: Record<string, string> = {
   admin: '平台管理员',
-  manager: '设计管理者',
-  member: '设计成员',
+  manager: '子管理员',
+  member: '普通成员',
 };
 
 function primaryRoleLabel(roleCodes: string[]) {

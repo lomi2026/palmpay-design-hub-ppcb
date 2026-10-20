@@ -18,9 +18,9 @@ const permissions = [
 ] as const;
 
 const roles = [
-  ['member', '设计成员'],
+  ['member', '普通成员'],
   ['admin', '平台管理员'],
-  ['manager', '设计管理者'],
+  ['manager', '子管理员'],
 ] as const;
 
 const rolePermissions: Record<(typeof roles)[number][0], readonly string[]> = {
