@@ -1,3 +1,23 @@
+## 2026-10-26 管理员 SSO 主流程真实验收通过，生产仍待完整验收
+
+- 已在真实浏览器以 lomi 管理员完成钉钉登录→Hub testing→观序独立测试站，正确显示姓名，无 ChatGPT 二次登录；回调完成后的地址无票据 fragment。
+- 在观序测试库创建一条明确命名的合成验收漏斗（100→60），上传合成 PNG；保存成功，刷新后数据仍在，来源原图可正常打开。退出观序后工作区接口拒绝访问，再经 Hub 登录可读取同一条记录。测试记录保留在测试站，未写生产。
+- Hub 测试版 REL-MVP06AIZ-BBFBA0BCF3 为 PUBLIC_READY；构建 BUILD-MVOZNA3S-ECBE5C4697 成功。观序测试版 V1／appgdep_6adf0b8728e48191bae9d05a7d1614e9 已成功发布。PPCB 两个运行 Pod 日志未发现 ERROR/Exception 或 JWT；Sites 最近19条事件未发现 JWT/异常级别记录。这是已读取日志范围内的检查，不代表所有上游日志均已审计。
+- 证据图片：/tmp/guanxu-sso-admin-verified.png、/tmp/guanxu-sso-admin-image-verified.png。普通脚本 HTTP 请求被站点边缘返回403/1010，不计为鉴权验收；匿名及退出后的拒绝访问由真实浏览器单独核对。
+- 仍未完成：普通员工、不同/同名员工数据与截图隔离、禁用/无权限账号、真实15分钟到期、旧 ChatGPT 登录与双身份关联/冲突的真实浏览器验收。过期、重放、签名、同名隔离、绑定冲突仅完成代码级测试。用户已明确当前先完成管理员验收。
+- 生产两端均未切换、未配置生产 SSO 密钥或执行本轮生产迁移。后续补齐真实验收，再按已授权的协调发布流程晋级同一 Hub 镜像；不得把当前管理员主流程成功解释为全部验收通过。
+
+## 2026-10-26 Hub SSO 测试发布成功，管理员验收进行中
+
+- 测试发布 `REL-MVP06AIZ-BBFBA0BCF3` 已 PUBLIC_READY，构建成功用时 14分37秒；平台 /healthz 返回 testing/200，匿名 /api/me 返回401。生产未晋级。
+- 管理员实际钉钉登录 Hub 后点击观序入口，成功进入独立观序测试站，姓名显示正确、无额外 ChatGPT 登录；正在验证合成记录与图片保存/刷新。
+- 用户目前无法安排普通员工，明确先做管理员验收；跨员工、同名员工真实隔离及普通角色验收保持未完成，不作为生产通过依据。
+
+## 2026-10-26 Hub SSO 测试构建已启动
+
+- Owner 测试 Secret 已保存（version 1）；Portal 表单 reset 报错未影响配置保存。复用已上传并预检通过的 07d79a6 包，未重新上传。
+- 构建 `BUILD-MVOZNA3S-ECBE5C4697`，操作 `OP-MVOZNA3S-B765A8D0F7`，revision `REV-MVOZNA3S-F64699EEBC`，large 档，目标 testing。尚未确认构建或部署成功，真实员工验收待进行；生产保持原版本。
+
 ## 2026-10-26 Hub SSO 移交包已接收并接入
 
 - 观序独立测试 V1 已发布成功：源码 `ad00159612131d2d449f4b21dcd4d4f9ec9ad45d`，版本 `appgprj_6adf0a1854c081919e5e05e0903a5517~appgver_4c1ac1a44b088191af708bafa2388e15`，部署 `appgdep_6adf0b8728e48191bae9d05a7d1614e9`；入口 `https://guanxu-hub-sso-testing.lomi20262026.chatgpt.site`。浏览器匿名打开可见 Hub/钉钉入口及原 ChatGPT 登录入口；尚未进行真实员工登录验收。HTTP 400 传输问题已通过 HTTP/1.1 和有界请求缓冲解决，同候选上传成功，无重复构建。
