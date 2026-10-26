@@ -1,3 +1,23 @@
+## 2026-10-26 Hub SSO 移交包已接收并接入
+
+- 独立观序测试站已创建：`appgprj_6adf0a1854c081919e5e05e0903a5517`，本地 `/Users/a1/Documents/Guanxu-SSO-Testing`；用户明确批准测试页面入口公开、业务数据继续鉴权。专用测试密钥已安全配置到 Sites，PPCB 普通配置已指向该测试站；等待 Owner Portal 保存测试 Secret。
+- Hub 候选包 `/private/tmp/palmpay-ppcb-07d79a637f10.zip`，7,021,402 字节，SHA-256 `669d8f728f47b961fe08e62ea64d338689bc715f77caa961cf9866605590d375`；452 项、12 个迁移文件，未新增 Hub 模型迁移。上传 `UPLOAD-MVOZ7EVG-6B08CEEA4E` 合并校验和预检通过，尚未发起构建。
+- 观序测试源码首次 push 返回 HTTP 400，未报为发布成功；已核对状态，采用 HTTP/1.1 和有界请求缓冲处理传输，继续同一候选、未重新构建。
+- 用户提供完整 ZIP；manifest 内全部 SHA-256 与 Git bundle 依赖验证通过，候选 `07d79a637f10f4dd83582691dfa1e26aa716f266` 已快进合入权威 `codex/ppcb-deployment`，保留两个原始提交。此前候选缺失阻断已解除。
+- Hub Web 77 项单测、Lint、类型检查通过；实际 Hub 签发函数与观序 Worker 6 项联调全部通过，原跳过项已补齐。两套 Web 构建及 API 构建已通过；真实浏览器与员工验收仍未完成。
+- PPCB 最新源码包 SHA-256 校验通过，446 个包内文件与基准 eaf5e32 完全一致，无远端新增差异。Sites 原生源码已成功取得，当前 HEAD 为 V10 对应的 54497dfa66bfc0595deed09084d23d1a5fe3a6b3；与 GitHub 导入候选应用源码一致，差异仅 README、.gitignore 及已跟踪 OCR 静态资源。
+- 尚未发布 SSO 或修改生产配置、数据。隔离测试密钥仍须按平台规则由 Owner 在 Portal 安全填写；新测试站默认私有，需要用户明确确认公开页面入口以完成免 ChatGPT 登录验收，业务数据仍按员工鉴权。
+
+## 2026-10-26 Hub → 观序统一登录验收已启动，等待 Hub 候选移交
+
+- 用户授权执行两端隔离测试、修复阻断项，全部验收通过后直接发布；未完成验证不得记为通过。本轮使用 PPCB 与 Sites 能力查询并核对当前线上状态。
+- 本地权威仓库在 `codex/ppcb-deployment`，启动基线为 `eaf5e32`；本机分支、关联工作树、文档及 GitHub 远端均未找到 `codex/guanxu-sso`。此前候选位于另一云端工作区 `/workspace/scratch/9615a29990a7/hub`，本机无法直接读取；需移交含基准 SHA、完整已提交/未提交差异和 `docs/21-GUANXU-SSO.md` 的补丁，或推送该分支后继续。未根据聊天叙述重写或假定候选已合入。
+- PPCB 实时生产为 `REL-MVHGQDAK-8CF3F7EBC1`，测试为 `REL-MVGM5Z6S-4FAEC17892`，均 `PUBLIC_READY`；最新受管源码为 `REV-MVGJEHA5-91105D68AA`，变更摘要仅角色显示名调整。上述为核对基线，不是本轮 SSO 发布编号。
+- 观序私有仓库候选 `bd0208b5c9d066d9f36d92dbcff949a7e5220694` 已克隆到本机临时审查目录 `/tmp/guanxu-sso-review.aut6m4`。已读取 AGENTS 与 `docs/hub-sso.md`，Node 24 生产构建成功；业务测试 31 通过，Sites/身份测试 12 通过、1 项实际 Hub 签发联调因缺少候选跳过，0 失败。构建前一次打包产物检查因 dist 尚未生成失败，构建后复验通过；不能将跳过项记为通过。
+- Sites 实时确认正式站仍为 V9，发布 `appgdep_6aa55f7f8918819191ba9fbc8a19f8a5` 成功；V10 为保存候选（源码 `54497dfa66bfc0595deed09084d23d1a5fe3a6b3`），无 deployment。生产配置键名列表尚无 `HUB_SSO_*` 或 `HUB_SESSION_SECRET`。未输出密钥值，未改访问范围、密钥、数据库或正式站。
+- Sites 原生源码读取的 Git 操作本轮未完成，尚未比较 Sites 当前源码与 GitHub 导入快照的完整文件差异；后续须复核成功后才能发布。未创建新的隔离观序环境、未发布 Hub SSO、未执行生产身份表迁移、未启用生产 SSO；管理员/普通员工真实钉钉往返、同名员工与截图隔离、注销/过期、原 ChatGPT 数据关联及日志脱敏均待候选移交后的完整验收。下一步取得补丁、核对两端源码差异，再按隔离测试方案继续。
+
+
 ## 2026-10-26 观序统一登录候选（尚未发布或启用）
 
 - 在远端 `codex/ppcb-deployment` 的 eaf5e32 基线增加 `/sso/guanxu`、专用凭证签发、工作台入口及观序工具/项目链接接入。钉钉/PPCB 身份校验复用现有 `/api/me`，不新增员工角色或修改 PostgreSQL。
