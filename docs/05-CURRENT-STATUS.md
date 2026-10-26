@@ -1,3 +1,7 @@
+## 2026-10-26 移除未经确认的观序侧边栏入口
+
+仅删除 workspace layout 中独立观序链接，保留工具详情打开按钮和 SSO 路由、鉴权配置；无数据、权限、依赖或迁移变化。Web 77 项测试、lint、类型检查通过，testing/production 两套 Web 构建通过；API 未变，复用本轮已通过构建。待测试后晋级生产。
+
 ## 2026-10-26 SSO 两端生产已发布（最新状态）
 
 - 观序 V10 发布成功：部署 `appgdep_6adf18c0e62c81918d4782fbb2de336d`；源码 `54497dfa66bfc0595deed09084d23d1a5fe3a6b3`（GitHub 导入候选 `bd0208b5c9d066d9f36d92dbcff949a7e5220694`）。正式地址保持 https://guanxu-funnel.lomi20262026.chatgpt.site 。三个 hub_* 身份表已创建，原 user_workspaces 仍1行、revision 12、updated_at 2026-09-18T02:09:10.225Z；未导入或自动关联旧数据。
