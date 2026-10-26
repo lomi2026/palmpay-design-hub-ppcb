@@ -1,3 +1,18 @@
+## 2026-10-26 SSO 两端生产已发布（最新状态）
+
+- 观序 V10 发布成功：部署 `appgdep_6adf18c0e62c81918d4782fbb2de336d`；源码 `54497dfa66bfc0595deed09084d23d1a5fe3a6b3`（GitHub 导入候选 `bd0208b5c9d066d9f36d92dbcff949a7e5220694`）。正式地址保持 https://guanxu-funnel.lomi20262026.chatgpt.site 。三个 hub_* 身份表已创建，原 user_workspaces 仍1行、revision 12、updated_at 2026-09-18T02:09:10.225Z；未导入或自动关联旧数据。
+- Hub 已将测试 `REL-MVP06AIZ-BBFBA0BCF3` 同一镜像晋级生产 `REL-MVP1HJOI-6AF0FE8832`，操作 `OP-MVP1HJOJ-C8A85F126A` 成功，PUBLIC_READY，2/2 实例就绪且零重启，无重新构建。Hub 应用源码 `07d79a637f10f4dd83582691dfa1e26aa716f266`。生产专用 Secret 已由 Owner 保存并注入。
+- 正式 Hub 浏览器刷新后可见“观序 · 数据分析”，工具“打开工具”也指向 /sso/guanxu；点击后浏览器地址已到观序正式根路径。但浏览器控制超时、随后 Debugger unattached，无法完成生产登录后页面及保存/刷新验收，不标为通过。测试环境管理员主流程验收证据见下文。普通员工、同名/跨员工隔离、禁用账号、真实到期、旧登录与双身份关联真实验收仍未完成。
+- 用户备份已验证 JSON、13张内嵌图片解码：2分组、6漏斗、13记录；受保护副本 `/Users/a1/Documents/PalmPay-private-backups/guanxu-before-sso-20261026.json`，0600，12,348,049字节，SHA256 `0eca95b976a47b5195122c9acfbbdce04df2552322d3f7d792a0df16461274dd`，未加入 Git。
+- 回退：观序重新部署原 V9 `appgprj_6aa2ab814b848191b4a692ab752ba381~appgver_3e6a87c1a1888191b367338bd861eb90`；Hub 使用平台原生产 `REL-MVHGQDAK-8CF3F7EBC1` 回退能力。关闭 SSO 开关需发布/重启生效；保留新增身份表和原工作区，不做破坏性数据库回滚。以下记录为各阶段历史状态。
+
+## 2026-10-26 用户授权基于管理员验收结果发布生产
+
+- 用户在已告知未完成项后明确要求发布线上；本轮保留普通员工等真实验收未完成记录，不冒充全项通过。
+- 两端生产普通配置与独立生产密钥已在 Sites 安全准备，等待 Owner 在 PPCB 生产环境保存 GUANXU_SSO_SECRET。当前尚未部署观序 V10、未晋级 Hub。
+- 回退候选：观序原 V9（appgprj_6aa2ab814b848191b4a692ab752ba381~appgver_3e6a87c1a1888191b367338bd861eb90）；Hub 原生产 REL-MVHGQDAK-8CF3F7EBC1。关闭 SSO 配置需发布/重启生效；不删除身份表或旧工作区。
+- 观序生产 user_workspaces 仅1行，MCP 字段截断，不能作完整数据备份；浏览器打开原站连续超时，备份尚未取得。
+
 ## 2026-10-26 管理员 SSO 主流程真实验收通过，生产仍待完整验收
 
 - 已在真实浏览器以 lomi 管理员完成钉钉登录→Hub testing→观序独立测试站，正确显示姓名，无 ChatGPT 二次登录；回调完成后的地址无票据 fragment。
