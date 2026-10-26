@@ -1,5 +1,7 @@
 ## 2026-10-26 Hub SSO 移交包已接收并接入
 
+- 观序独立测试 V1 已发布成功：源码 `ad00159612131d2d449f4b21dcd4d4f9ec9ad45d`，版本 `appgprj_6adf0a1854c081919e5e05e0903a5517~appgver_4c1ac1a44b088191af708bafa2388e15`，部署 `appgdep_6adf0b8728e48191bae9d05a7d1614e9`；入口 `https://guanxu-hub-sso-testing.lomi20262026.chatgpt.site`。浏览器匿名打开可见 Hub/钉钉入口及原 ChatGPT 登录入口；尚未进行真实员工登录验收。HTTP 400 传输问题已通过 HTTP/1.1 和有界请求缓冲解决，同候选上传成功，无重复构建。
+- 本地 Hub 候选及状态文档已推送 GitHub `codex/ppcb-deployment`（540a050）；生产应用未变。
 - 独立观序测试站已创建：`appgprj_6adf0a1854c081919e5e05e0903a5517`，本地 `/Users/a1/Documents/Guanxu-SSO-Testing`；用户明确批准测试页面入口公开、业务数据继续鉴权。专用测试密钥已安全配置到 Sites，PPCB 普通配置已指向该测试站；等待 Owner Portal 保存测试 Secret。
 - Hub 候选包 `/private/tmp/palmpay-ppcb-07d79a637f10.zip`，7,021,402 字节，SHA-256 `669d8f728f47b961fe08e62ea64d338689bc715f77caa961cf9866605590d375`；452 项、12 个迁移文件，未新增 Hub 模型迁移。上传 `UPLOAD-MVOZ7EVG-6B08CEEA4E` 合并校验和预检通过，尚未发起构建。
 - 观序测试源码首次 push 返回 HTTP 400，未报为发布成功；已核对状态，采用 HTTP/1.1 和有界请求缓冲处理传输，继续同一候选、未重新构建。
