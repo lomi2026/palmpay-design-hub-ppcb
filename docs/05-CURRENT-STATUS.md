@@ -1,6 +1,6 @@
 ## 2026-10-26 移除未经确认的观序侧边栏入口
 
-仅删除 workspace layout 中独立观序链接，保留工具详情打开按钮和 SSO 路由、鉴权配置；无数据、权限、依赖或迁移变化。Web 77 项测试、lint、类型检查通过，testing/production 两套 Web 构建通过；API 未变，复用本轮已通过构建。待测试后晋级生产。
+仅删除 workspace layout 中独立观序链接，保留工具详情打开按钮和 SSO 路由、鉴权配置；无数据、权限、依赖或迁移变化。Web 77 项测试、lint、类型检查通过，testing/production 两套 Web 构建通过；API 未变，复用本轮已通过构建。测试版本 `REL-MVP2FJBF-93E2EE3B5C` 已验收并晋级同一镜像至生产 `REL-MVP2H5WM-DE263C123F`（PUBLIC_READY），构建 `BUILD-MVP260YH-95EAD452BD` 用时7分13秒。测试平台健康200、匿名API401；真实测试及生产页面确认独立菜单已移除，生产观序工具详情“打开工具”仍指向 /sso/guanxu。仅导航删除，本轮不将此前未完成的跨员工SSO验收记为通过。源码 `6bbfa0af412d`，验收截图 `/tmp/ppcb-sidebar-removed.png`。
 
 ## 2026-10-26 SSO 两端生产已发布（最新状态）
 
