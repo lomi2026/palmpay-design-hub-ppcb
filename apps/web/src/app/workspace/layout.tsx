@@ -75,6 +75,7 @@ export default async function WorkspaceLayout({ children }: Readonly<{ children:
         <div className="flex-1 overflow-y-auto p-2.5">
           <Button asChild variant="outline" className="mb-6 h-10 w-full justify-start rounded-[12px] border-white/[.15] bg-transparent px-3 text-[13px] text-white hover:bg-white/[.06] hover:text-white"><Link href="/"><span className="mr-1">←</span> 返回平台首页</Link></Button>
           <WorkspaceSidebarNavigation {...navigationProps} />
+          {process.env.AUTH_MODE === 'ppcb' && process.env.GUANXU_SSO_ENABLED === 'true' && user.permissions.includes('content.read') && <a className="mt-4 block rounded-xl px-3 py-2 text-sm" href={appPath('/sso/guanxu')}>观序 · 数据分析</a>}
         </div>
       </aside>
       <div className="md:pl-[224px]">

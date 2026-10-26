@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { guanxuToolLink } from '@/lib/guanxu-link';
 import { ManagementMenu } from '@/components/workspace/management-menu';
 import { CachedWorkspacePage } from '@/components/workspace/navigation-cache';
 import { DeleteContentButton } from '@/components/workspace/delete-content-button';
@@ -62,7 +63,7 @@ async function AIProjectDetailPage({
   const canArchive = currentUser?.permissions.includes('content.archive') ?? false;
   const detail = project.projectDetail;
   const body = getImportedProjectBody(project.currentVersion?.body);
-  const projectPageUrl = resolveProjectPageUrl(body, detail?.convertedProjectRef);
+  const projectPageUrl = guanxuToolLink(resolveProjectPageUrl(body, detail?.convertedProjectRef));
   const priority = body.prioritization;
   const stage = detail ? stageLabels[detail.projectStage] : '待补充';
   const projectCode = detail?.projectCode ?? 'AI 项目';

@@ -1,3 +1,7 @@
+## 2026-10-26 观序身份关联边界
+
+Hub 本轮不改变数据库模型、角色或企业身份映射，读取已验证的 employeeId、organizationId、name 生成短时凭证。观序端新增 hub_identities（员工主体→工作区，双方唯一）、hub_sessions（随机会话哈希与有效期）、hub_used_tickets（一次性 jti 唯一索引）。绑定以 issuer/organizationId/employeeId 派生键，不使用姓名；原 GPT 数据通过双身份验证首次关联，源记录和截图不搬迁，不合并或覆盖已绑定员工数据。
+
 ## 2026-09-17 PPCB database and attachment deployment boundary
 
 PPCB injects separate testing/production PostgreSQL schemas. All Prisma operations and raw SQL use the injected schema with per-connection `search_path` and platform-required `ssl=false`; the existing entities, migrations, IDs, versions and audit model are unchanged. Testing seeds system configuration only. Production applies migrations and waits for a reviewed existing-data import instead of generating conflicting seed IDs.

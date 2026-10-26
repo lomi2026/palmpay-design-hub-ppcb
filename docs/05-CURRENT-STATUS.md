@@ -1,3 +1,11 @@
+## 2026-10-26 观序统一登录候选（尚未发布或启用）
+
+- 在远端 `codex/ppcb-deployment` 的 eaf5e32 基线增加 `/sso/guanxu`、专用凭证签发、工作台入口及观序工具/项目链接接入。钉钉/PPCB 身份校验复用现有 `/api/me`，不新增员工角色或修改 PostgreSQL。
+- 配置开关默认关闭，未设置任何线上密钥、未改变在线访问权限、未发布 PPCB。对应观序候选已完成接收与个人数据绑定，配置说明见 21 文档。
+- Hub Web 77 项测试、类型检查与 Lint 通过；实际 Hub 签发函数与实际观序 Worker/SQLite 联调通过，覆盖并发一次性消费。观序 31 项逻辑测试、7 项原 Worker 测试、6 项新增登录/联调测试通过，生产构建通过。
+- Hub 双环境构建在第一套构建时受执行环境阻塞：`process.memoryUsage()` 单独运行也返回 `ENOENT uv_resident_set_memory`。未伪造内存指标或修改 Next.js 依赖，不能把 testing/production 构建标记为通过。
+- 下一步：在可正常构建的开发/PPCB 测试环境完成双构建，配置隔离测试观序环境与专用密钥，分别以 Owner/普通 User 真实钉钉登录验收。当前对话没有 PPCB 发布接口，未完成平台部署和浏览器端验收。通过后按检查卡单独确认生产晋级。
+
 ## 2026-10-13 第 34 个 AI 项目及查看入口已发布生产
 
 - 将用户提供的 `AI产品质量与研发效能_项目详情.html` 适配为 P27「AI 产品质量与研发效能」，并加入独立仓库的 GitHub Pages 项目目录。线上详情入口为 `https://lomi2026.github.io/palmpay-design-hub-ppcb/projects/project-detail.html?id=P27`，不再依赖 ChatGPT Sites。

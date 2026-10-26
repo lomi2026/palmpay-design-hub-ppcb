@@ -1,4 +1,5 @@
 import { ManagementMenu } from '@/components/workspace/management-menu';
+import { guanxuToolLink } from '@/lib/guanxu-link';
 import { DeleteContentButton } from './delete-content-button';
 import { WorkspaceDataLink as Link } from '@/components/workspace/workspace-data-link';
 import { notFound } from 'next/navigation';
@@ -67,7 +68,7 @@ export async function PublishedContentDetail({
       return null;
     }
   };
-  const toolUrl = externalUrl(body.websiteUrl);
+  const toolUrl = guanxuToolLink(externalUrl(body.websiteUrl) ?? undefined);
   const assetUrl = externalUrl(body.resourceLinks);
   const caseUrl = externalUrl(body.caseUrl) ?? externalUrl((body.source as Record<string, unknown> | undefined)?.baselineUrl);
   return (
